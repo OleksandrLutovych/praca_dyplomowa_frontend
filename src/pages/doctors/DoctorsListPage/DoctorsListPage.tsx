@@ -1,6 +1,6 @@
 import {DoctorsList} from "../../../features/doctors/ui";
 
-const DoctorsPage = () => {
+const DoctorsListPage = () => {
     return (
         <>
             <DoctorsList />
@@ -8,4 +8,4 @@ const DoctorsPage = () => {
     );
 };
 
-export default DoctorsPage;
+export default DoctorsListPage;

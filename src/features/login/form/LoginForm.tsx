@@ -1,17 +1,12 @@
-import {SignInContainer} from '../../../shared/ui/layout';
-import {Card} from '../../../shared/ui/components';
 import {
     Alert,
-    Backdrop,
     Box,
     Button,
-    CircularProgress,
     Collapse,
     Divider,
     FormControl,
     FormLabel,
     Link,
-    Snackbar,
     TextField,
     Typography,
 } from '@mui/material';
@@ -23,12 +18,14 @@ import {AxiosError, AxiosResponse} from "axios";
 import {defaultValues, LoginFormData, LoginResponse, schema} from "./config.ts";
 import {loginApi} from "../api";
 import {useState} from "react";
+import {Input} from "../../../shared/form-inputs";
+import {AuthLayout} from "../../../shared/layouts";
 
 const LoginForm = () => {
 
     const navigate = useNavigate();
     const [isLoadingPage, setLoadingPage] = useState<boolean>(false)
-    const {handleSubmit, register, formState: {errors}} = useForm<LoginFormData>({
+    const {handleSubmit, register, control, formState: {errors}} = useForm<LoginFormData>({
         resolver: zodResolver(schema),
         defaultValues,
     });
@@ -38,12 +35,14 @@ const LoginForm = () => {
         error,
         isError,
         isSuccess,
+        isPending
     } = useMutation<AxiosResponse<LoginResponse>, AxiosError, LoginFormData>({
         mutationKey: ['register'],
         mutationFn: (data) => loginApi(data),
         onSuccess: ({data}) => {
-            const {access_token} = data;
-            localStorage.setItem("accessToken", access_token)
+            const {accessToken, refreshToken} = data;
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
             setTimeout(() => {
                 setLoadingPage(true)
             }, 1000)
@@ -61,41 +60,40 @@ const LoginForm = () => {
     };
 
     return (
-        <SignInContainer direction="column" justifyContent="space-between">
-
-            <Card variant="outlined">
+        <AuthLayout isLoading={isPending || isLoadingPage}>
+            <>
                 <Collapse in={isSuccess || isError}>
                     <Alert
                         severity={isSuccess ? 'success' : 'error'}
                         sx={{mb: 2}}
                     >
                         {error && error?.message}
-                        {isSuccess && 'Konto zostało utworzone. Sprawdź swoją skrzynkę mailową, aby aktywować konto.'}
+                        {isSuccess && 'Zalogowano!.'}
                     </Alert>
                 </Collapse>
                 <Typography
                     component="h1"
                     variant="h4"
-                    sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+                    sx={{fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
                 >
                     Logowanie
                 </Typography>
                 <form onSubmit={handleSubmit(handleFormSubmit)}
                       style={{display: 'flex', flexDirection: 'column', width: '100%', gap: 10}}>
+                    <Input name={"email"} label={"email@gmail.com"} type={"email"} defaultValue={defaultValues.email}
+                           control={control} title={"Email"}/>
+
                     <FormControl>
-                        <FormLabel htmlFor="email" sx={{textAlign: 'start'}}>Email</FormLabel>
-                        <TextField
-                            label="email@gmail.com"
-                            type="text"
-                            fullWidth
-                            margin="normal"
-                            defaultValue={defaultValues.email}
-                            {...register('email')}
-                            error={!!errors.email}
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel htmlFor="email" sx={{textAlign: 'start'}}>Hasło</FormLabel>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                            <FormLabel htmlFor="password">Hasło</FormLabel>
+                            <Link
+                                variant="body2"
+                                sx={{alignSelf: 'baseline'}}
+                                href={'/reset-password'}
+                            >
+                                Zapomniałeś hasło?
+                            </Link>
+                        </Box>
                         <TextField
                             label="********"
                             type="password"
@@ -116,15 +114,13 @@ const LoginForm = () => {
                     </Button>
                     <Typography sx={{textAlign: 'center'}}>
                         Nie posiadasz konta?{' '}
-                        <span>
-                <Link
-                    href="/register"
-                    variant="body2"
-                    sx={{alignSelf: 'center'}}
-                >
-                  Zarejestruj się!
-                </Link>
-              </span>
+                        <Link
+                            href="/register"
+                            variant="body2"
+                            sx={{alignSelf: 'center'}}
+                        >
+                            Zarejestruj się!
+                        </Link>
                     </Typography>
                 </form>
                 <Divider>Lub</Divider>
@@ -137,33 +133,8 @@ const LoginForm = () => {
                         Zaloguj się z Google
                     </Button>
                 </Box>
-            </Card>
-            <Snackbar
-                open={isSuccess}
-                autoHideDuration={3000}
-                anchorOrigin={{vertical: "top", horizontal: "center"}}
-            >
-                <Alert severity={'success'} variant="filled">
-                    {isSuccess && (
-                        <Typography>
-                            Zalogowano się pomyślnie
-                        </Typography>
-                    )
-                    }
-                    {
-                        isError && (<Typography>
-                            {error?.message}
-                        </Typography>)
-                    }
-                </Alert>
-            </Snackbar>
-            <Backdrop
-                sx={(theme) => ({color: '#fff', zIndex: theme.zIndex.drawer + 1})}
-                open={isLoadingPage}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
-        </SignInContainer>
+            </>
+        </AuthLayout>
     );
 };
 

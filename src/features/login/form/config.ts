@@ -6,7 +6,8 @@ type LoginFormData = {
 }
 
 type LoginResponse = {
-    access_token: string
+    accessToken: string
+    refreshToken: string
 }
 const defaultValues: LoginFormData = {
     email: "",

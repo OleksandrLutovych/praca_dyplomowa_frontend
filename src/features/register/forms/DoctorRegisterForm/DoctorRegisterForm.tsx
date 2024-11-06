@@ -1,19 +1,5 @@
-import {Card} from "../../../../shared/ui/components";
-import {
-    Alert,
-    Backdrop,
-    Box,
-    Button,
-    CircularProgress,
-    Collapse,
-    FormControl,
-    FormLabel,
-    Link,
-    TextField,
-    Typography
-} from "@mui/material";
+import {Alert, Button, Collapse, FormControl, FormLabel, Link, TextField, Typography} from "@mui/material";
 import {Input} from "../../../../shared/form-inputs";
-import {SignInContainer} from "../../../../shared/ui/layout";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
@@ -22,6 +8,7 @@ import {useMutation} from "@tanstack/react-query";
 import {AxiosError} from "axios";
 import {doctorRegisterApi} from "../../api/register-api.ts";
 import {defaultValues, DoctorRegisterFormData, schema} from "./config.ts";
+import {AuthLayout} from "../../../../shared/layouts";
 
 const DoctorRegisterForm = () => {
 
@@ -55,8 +42,8 @@ const DoctorRegisterForm = () => {
     };
 
     return (
-        <SignInContainer direction="column" justifyContent="space-between">
-            <Card variant="outlined">
+        <AuthLayout isLoading={isPending || nextPageLoading}>
+            <>
                 <Collapse in={isSuccess || isError}>
                     <Alert
                         severity={isSuccess ? 'success' : 'error'}
@@ -69,9 +56,9 @@ const DoctorRegisterForm = () => {
                 <Typography
                     component="h1"
                     variant="h4"
-                    sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+                    sx={{fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
                 >
-                    Sign up
+                    Rejestracja lekarza
                 </Typography>
                 <form onSubmit={handleSubmit(handleFormSubmit)}
                       style={{display: 'flex', flexDirection: 'column', width: '100%', gap: 10}}>
@@ -84,17 +71,7 @@ const DoctorRegisterForm = () => {
                            control={control} title={"Email"}/>
 
                     <FormControl>
-                        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                            <Link
-                                component="button"
-                                type="button"
-                                variant="body2"
-                                sx={{alignSelf: 'baseline'}}
-                            >
-                                Forgot your password?
-                            </Link>
-                        </Box>
+                        <FormLabel htmlFor="password">Hasło</FormLabel>
                         <TextField
                             label="*****"
                             type="password"
@@ -115,7 +92,7 @@ const DoctorRegisterForm = () => {
                         type="submit"
                         variant="contained"
                     >
-                        Sign up
+                        Załóż konto
                     </Button>
                 </form>
 
@@ -129,17 +106,8 @@ const DoctorRegisterForm = () => {
                         Zaloguj się!
                     </Link>
                 </Typography>
-
-
-            </Card>
-            <Backdrop
-                sx={(theme) => ({color: '#fff', zIndex: theme.zIndex.drawer + 1})}
-                open={isPending || nextPageLoading}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
-
-        </SignInContainer>
+            </>
+        </AuthLayout>
     );
 };
 

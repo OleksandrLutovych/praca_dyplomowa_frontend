@@ -1,18 +1,4 @@
-import {SignInContainer} from '../../../../shared/ui/layout';
-import {Card} from '../../../../shared/ui/components';
-import {
-    Alert,
-    Backdrop,
-    Box,
-    Button,
-    CircularProgress,
-    Collapse,
-    FormControl,
-    FormLabel,
-    Link,
-    TextField,
-    Typography,
-} from '@mui/material';
+import {Alert, Button, Collapse, Link, Typography,} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import {defaultValues, InitialRegisterFormData, schema} from './config.ts';
 import {zodResolver} from '@hookform/resolvers/zod';
@@ -22,13 +8,14 @@ import {AxiosError} from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {useState} from "react";
 import {Input} from "../../../../shared/form-inputs";
+import {AuthLayout} from "../../../../shared/layouts";
 
 const RegisterForm = () => {
 
     const [nextPageLoading, setNextPageLoading] = useState(false);
 
     const navigate = useNavigate();
-    const {handleSubmit, register, formState: {errors}, control} = useForm<InitialRegisterFormData>({
+    const {handleSubmit, control} = useForm<InitialRegisterFormData>({
         resolver: zodResolver(schema),
         defaultValues,
     });
@@ -43,8 +30,6 @@ const RegisterForm = () => {
         mutationKey: ['register'],
         mutationFn: (data) => registerApi(data),
         onSuccess: () => {
-
-
             setTimeout(() => {
                 setNextPageLoading(false);
                 navigate('/login');
@@ -58,8 +43,8 @@ const RegisterForm = () => {
 
 
     return (
-        <SignInContainer direction="column" justifyContent="space-between">
-            <Card variant="outlined">
+        <AuthLayout isLoading={isPending || nextPageLoading}>
+            <>
                 <Collapse in={isSuccess || isError}>
                     <Alert
                         severity={isSuccess ? 'success' : 'error'}
@@ -72,47 +57,25 @@ const RegisterForm = () => {
                 <Typography
                     component="h1"
                     variant="h4"
-                    sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
+                    sx={{fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}
                 >
-                    Sign up
+                    Rejestracja
                 </Typography>
                 <form onSubmit={handleSubmit(handleFormSubmit)}
                       style={{display: 'flex', flexDirection: 'column', width: '100%', gap: 10}}>
-
                     <Input name={"firstName"} label={"Jan"} type={"text"} defaultValue={defaultValues.firstName}
                            control={control} title={"Imię"}/>
                     <Input name={"lastName"} label={"Kowalski"} type={"text"} defaultValue={defaultValues.lastName}
                            control={control} title={"Nazwisko"}/>
                     <Input name={"email"} label={"email@gmail.com"} type={"email"} defaultValue={defaultValues.email}
                            control={control} title={"Email"}/>
-
-                    <FormControl>
-                        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                            <Link
-                                component="button"
-                                type="button"
-                                variant="body2"
-                                sx={{alignSelf: 'baseline'}}
-                            >
-                                Forgot your password?
-                            </Link>
-                        </Box>
-                        <TextField
-                            label="*****"
-                            type="password"
-                            fullWidth
-                            margin="normal"
-                            defaultValue={defaultValues.password}
-                            {...register('password')}
-                            error={!!errors.password}
-                        />
-                    </FormControl>
+                    <Input name={"password"} label={"*****"} title={"Hasło"} type={"password"}
+                           defaultValue={defaultValues.password} control={control}/>
                     <Button
                         type="submit"
                         variant="contained"
                     >
-                        Sign up
+                        Załóż konto
                     </Button>
                 </form>
 
@@ -136,17 +99,8 @@ const RegisterForm = () => {
                         Załóż profil lekarza!
                     </Link>
                 </Typography>
-
-
-            </Card>
-            <Backdrop
-                sx={(theme) => ({color: '#fff', zIndex: theme.zIndex.drawer + 1})}
-                open={isPending || nextPageLoading}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
-
-        </SignInContainer>
+            </>
+        </AuthLayout>
     );
 };
 

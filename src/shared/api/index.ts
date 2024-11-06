@@ -1,3 +1,3 @@
-import API from "./client.ts";
+import { API, SIMPLE_API } from "./client.ts";
 
-export {API};
+export { API, SIMPLE_API };

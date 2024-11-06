@@ -1,8 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import {activateAccountApi} from "../../../features/activate-account/api";
-import {Alert, Backdrop, Button, CircularProgress} from "@mui/material";
-import {SignInContainer} from "../../../shared/ui/layout";
+import {Alert, Button} from "@mui/material";
+import {AuthLayout} from "../../../shared/layouts";
 
 const ActivateAccountPage = () => {
     const params = useParams()
@@ -14,14 +14,9 @@ const ActivateAccountPage = () => {
         queryFn: async () => activateAccountApi({id: userId})
     })
     return (
-        <>
-            <SignInContainer direction="column" justifyContent="space-between">
-                <Backdrop
-                    sx={(theme) => ({color: '#fff', zIndex: theme.zIndex.drawer + 1})}
-                    open={isPending}
-                >
-                    <CircularProgress color="inherit"/>
-                </Backdrop>
+        <AuthLayout isLoading={isPending}>
+            <>
+
                 {isSuccess &&
                     (<Alert variant="filled" severity="success" action={
                         <Button onClick={() => navigate('/login')} color="inherit" variant={'outlined'}>Zaloguj
@@ -30,8 +25,8 @@ const ActivateAccountPage = () => {
                         Konto zostało aktywowane! Możesz się zalogować.
                     </Alert>)
                 }
-            </SignInContainer>
-        </>
+            </>
+        </AuthLayout>
     );
 };
 

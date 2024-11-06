@@ -9,12 +9,13 @@ import {
     ListItemText,
     Stack,
     Toolbar,
+    Tooltip,
     Typography,
     useTheme
 } from "@mui/material";
 import {CiLogout as LogoutIcon, CiMenuFries as MenuIcon} from "react-icons/ci";
 import {ReactNode, useState} from "react";
-import {AppBar, Drawer, DrawerHeader} from "../../components";
+import {AppBar, Drawer, DrawerHeader} from "../../ui/components";
 import {useNavigate} from "react-router-dom";
 
 type Props = {
@@ -34,6 +35,11 @@ const DashboardLayout = ({children, menuItems}: Props) => {
     const toogleDrawer = () => {
         setOpen(prev => !prev);
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        navigate('/login');
+    }
 
 
     return (
@@ -59,9 +65,11 @@ const DashboardLayout = ({children, menuItems}: Props) => {
                         <Typography variant="h6" noWrap component="div">
                             Praca dyplomowa
                         </Typography>
-                        <IconButton sx={{
-                            color: "white",
-                        }}><LogoutIcon/></IconButton>
+                        <Tooltip title="Wyloguj się" arrow>
+                            <IconButton sx={{color: "white"}} onClick={handleLogout}>
+                                <LogoutIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </Stack>
                 </Toolbar>
             </AppBar>
