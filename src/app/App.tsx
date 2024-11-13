@@ -5,19 +5,25 @@ import { queryClient } from '../shared/api/query-client.ts';
 import ProtectedRoute from "../pages/auth/routes/ProtectedRoute.tsx";
 import DoctorRegisterPage from "../pages/auth/ui/DoctorRegisterPage.tsx";
 import { CiStethoscope as MainIcon } from "react-icons/ci";
-import Dashboard from "../features/dashboard/Dashboard.tsx";
 import { DashboardLayout } from "../shared/layouts";
 import { Provider } from "react-redux";
 import { store } from "./stores/main-store.ts";
 import { DoctorsListPage, DoctorViewPage } from '../pages/doctors';
+import 'react-calendar/dist/Calendar.css';
+import './Calendar.css'
+import { MyProfile } from '../features/profile/ui/index.ts';
+import { FaRegUserCircle as ProfileIcon } from "react-icons/fa";
+import { FaUserDoctor as DoctorIcon } from "react-icons/fa6";
+import { Dashboard } from '../pages/dashboard/ui/index.ts';
+import { RxDashboard as DashboardIcon, RxCalendar as CalendarIcon } from "react-icons/rx";
 
 function App() {
 
     const menuItems = [
-        { title: "Strona Główna", path: "/dashboard", icon: <MainIcon size={25} /> },
-        { title: "Lekarze", path: "doctors", icon: <MainIcon size={25} /> },
-        { title: "Kalendarz", path: "my-calendar", icon: <MainIcon size={25} /> },
-        { title: "Recepty", path: "recipes", icon: <MainIcon size={25} /> },
+        { title: "Strona Główna", path: "/dashboard", icon: <DashboardIcon size={25} /> },
+        { title: "Kalendarz", path: "calendar", icon: <CalendarIcon size={25} /> },
+        { title: "Lekarze", path: "doctors", icon: <DoctorIcon size={25} /> },
+        { title: "Mój profil", path: "profile", icon: <ProfileIcon size={25} /> },
     ]
 
     return (
@@ -40,6 +46,7 @@ function App() {
                             <Route path={''} element={<Dashboard />} />
                             <Route path={'doctors'} element={<DoctorsListPage />} />
                             <Route path={'doctors/:id'} element={<DoctorViewPage />} />
+                            <Route path={'profile'} element={<MyProfile />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

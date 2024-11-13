@@ -1,0 +1,8 @@
+/* CalendarStyles.css */
+
+/* Убираем рамки вокруг всего календаря */
+.react-calendar {
+  border: none;
+  box-shadow: none;
+}
+

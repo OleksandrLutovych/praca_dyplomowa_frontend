@@ -1,5 +1,5 @@
 type Doctor = {
-  id: string;
+  id: number;
   user: {
     firstName: string;
     lastName: string;

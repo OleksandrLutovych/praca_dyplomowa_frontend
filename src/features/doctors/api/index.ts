@@ -10,7 +10,7 @@ const getMany = () => {
     params: {},
   });
 };
-const getOne = async ({ id }: { id: string }) => {
+const getOne = async ({ id }: { id: number }) => {
   return API.request<AxiosResponse<Doctor>>({
     method: "GET",
     url: `/doctors/${id}`,
