@@ -1,16 +1,4 @@
-type Doctor = {
-  id: number;
-  user: {
-    firstName: string;
-    lastName: string;
-  };
-  proffesion: string;
-  services: string[];
-  rating: number;
-  image: string;
-};
-
-type DoctorProfileData = {
+export interface DoctorProfileData {
   personalData: {
     name: string;
     lastName: string;
@@ -27,8 +15,8 @@ type DoctorProfileData = {
   services: {
     service: string;
     price: number;
-    recomendation?: string;
+    recomendations?: string;
   }[];
-};
+}
 
-export type { Doctor, DoctorProfileData };
+export interface PatientProfileData {}

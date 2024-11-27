@@ -1,4 +1,4 @@
-import {DoctorsList} from "../../../features/doctors/ui";
+import { DoctorsList } from "../../../../features/doctors/ui";
 
 const DoctorsListPage = () => {
     return (

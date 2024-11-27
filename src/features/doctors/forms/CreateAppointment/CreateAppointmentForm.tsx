@@ -1,11 +1,16 @@
 import { Controller, useForm } from "react-hook-form";
 import CreateAppointmentFormData from "./types";
 import { FC, useState } from "react";
-import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import Calendar from "react-calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { defaultValues, schema } from "./config";
-import { VisitType } from "../../../../entities/visits/enums";
+import { VisitSubType, VisitType } from "../../../../entities/visits/enums";
+import { useQuery } from "@tanstack/react-query";
+import { DoctorsApi } from "../../api";
+import { useParams } from "react-router-dom";
+import { AxiosError } from "axios";
+import { DoctorService } from "../../../../entities/doctor-service/types";
 
 type Props = {
   handleFormSubmit: (data: CreateAppointmentFormData) => void;
@@ -13,6 +18,11 @@ type Props = {
 
 const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
 
+  const params = useParams();
+
+  const { id } = params;
+
+  console.log(id)
   const [initialValue, onChange] = useState<Date>(new Date());
   const { handleSubmit, control } = useForm<CreateAppointmentFormData>({
     resolver: zodResolver(schema),
@@ -21,12 +31,26 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
   const procedures = ['Konsultacja', 'USG'];
   const times = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
   const visitTypes = () => Object.entries(VisitType).map(([key, value]) => value);
+  const visitSubTypes = () => Object.entries(VisitSubType).map(([key, value]) => value);
+
+  const { data } = useQuery<unknown, AxiosError, DoctorService[]>({
+    queryKey: ['procedures', id],
+    queryFn: async () => {
+      const response = DoctorsApi.getServices({ id: Number(id) });
+
+      const { data } = await response;
+
+      return data;
+    }
+  })
+
+  console.log(data)
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}
       style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 10, alignItems: 'center' }}>
 
-      <Controller name={'procedure'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
+      <Controller name={'type'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
         <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
           <InputLabel id="procedure-label">Wybierz typ wizyty</InputLabel>
           <Select
@@ -44,7 +68,25 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
       )} />
-      <Controller name={'procedure'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
+      <Controller name={'subType'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
+        <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
+          <InputLabel id="procedure-label">Wybierz typ wizyty</InputLabel>
+          <Select
+            labelId="procedure-label"
+            label="Wybierz zabieg"
+            value={value}
+            onChange={onChange}
+          >
+            {visitSubTypes().map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )} />
+      <Controller name={'serviceId'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
         <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
           <InputLabel id="procedure-label">Wybierz zabieg</InputLabel>
           <Select
@@ -53,12 +95,19 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
             value={value}
             onChange={onChange}
           >
-            {procedures.map((procedure) => (
-              <MenuItem key={procedure} value={procedure}>
-                {procedure}
+            {data && data.map(({ id, price, service }) => (
+              <MenuItem key={service} value={id}>
+                {service}  {price} zł
               </MenuItem>
             ))}
           </Select>
+          <FormHelperText>{error?.message}</FormHelperText>
+        </FormControl>
+      )} />
+
+      <Controller name={'place'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
+        <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
+          <TextField value={value} onChange={onChange} />
           <FormHelperText>{error?.message}</FormHelperText>
         </FormControl>
       )} />

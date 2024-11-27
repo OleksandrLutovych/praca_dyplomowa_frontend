@@ -13,24 +13,30 @@ import {
     Typography,
     useTheme
 } from "@mui/material";
-import {CiLogout as LogoutIcon, CiMenuFries as MenuIcon} from "react-icons/ci";
-import {ReactNode, useState} from "react";
-import {AppBar, Drawer, DrawerHeader} from "../../ui/components";
-import {useNavigate} from "react-router-dom";
+import { ReactNode, useState } from "react";
+import { CiLogout as LogoutIcon, CiMenuFries as MenuIcon } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import { useUserData } from "../../hooks/useUserData";
+import { AppBar, Drawer, DrawerHeader } from "../../ui/components";
+import { Roles } from "../../../entities/user/enums";
+import { queryCache, queryClient } from "../../api/query-client";
 
 type Props = {
     children: JSX.Element
     menuItems: {
         title: string,
         path: string,
-        icon: ReactNode
+        icon: ReactNode,
+        roles?: Roles[]
     }[]
 }
 
-const DashboardLayout = ({children, menuItems}: Props) => {
+const DashboardLayout = ({ children, menuItems }: Props) => {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+
+    const { data } = useUserData();
 
     const toogleDrawer = () => {
         setOpen(prev => !prev);
@@ -38,13 +44,16 @@ const DashboardLayout = ({children, menuItems}: Props) => {
 
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
+        queryClient.clear()
         navigate('/login');
     }
 
+    console.log(data?.roles)
+
 
     return (
-        <Box sx={{display: 'flex'}}>
-            <CssBaseline/>
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
@@ -56,18 +65,18 @@ const DashboardLayout = ({children, menuItems}: Props) => {
                             {
                                 marginRight: 5,
                             },
-                            open && {display: 'none'},
+                            open && { display: 'none' },
                         ]}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
                     <Stack direction={'row'} justifyContent={'space-between'} width={'100%'}>
                         <Typography variant="h6" noWrap component="div">
                             Praca dyplomowa
                         </Typography>
                         <Tooltip title="Wyloguj się" arrow>
-                            <IconButton sx={{color: "white"}} onClick={handleLogout}>
-                                <LogoutIcon/>
+                            <IconButton sx={{ color: "white" }} onClick={handleLogout}>
+                                <LogoutIcon />
                             </IconButton>
                         </Tooltip>
                     </Stack>
@@ -76,30 +85,24 @@ const DashboardLayout = ({children, menuItems}: Props) => {
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
                     <IconButton onClick={toogleDrawer}>
-                        {theme.direction === 'rtl' ? <MenuIcon/> : <MenuIcon/>}
+                        {theme.direction === 'rtl' ? <MenuIcon /> : <MenuIcon />}
                     </IconButton>
                 </DrawerHeader>
                 <List>
-                    {menuItems.map(({
-                                        title,
-                                        icon,
-                                        path
-                                    }) => (
-                        <ListItem key={title} disablePadding sx={{display: 'block'}}>
+                    {data && menuItems.map(({
+                        title,
+                        icon,
+                        path,
+                        roles
+                    }) => {
+                        if (roles?.length && !roles.some(r => data.roles.includes(r))) return null;
+
+
+                        return <ListItem key={title} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton onClick={() => navigate(path)}
-                                            sx={[
-                                                {
-                                                    minHeight: 48,
-                                                    px: 2.5,
-                                                },
-                                                open
-                                                    ? {
-                                                        justifyContent: 'initial',
-                                                    }
-                                                    : {
-                                                        justifyContent: 'center',
-                                                    },
-                                            ]}
+                                sx={[{ minHeight: 48, px: 2.5, },
+                                open ? { justifyContent: 'initial', } : { justifyContent: 'center' },
+                                ]}
                             >
                                 <ListItemIcon
                                     sx={[
@@ -132,11 +135,11 @@ const DashboardLayout = ({children, menuItems}: Props) => {
                                 />
                             </ListItemButton>
                         </ListItem>
-                    ))}
+                    })}
                 </List>
             </Drawer>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
-                <DrawerHeader/>
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                <DrawerHeader />
                 {children}
             </Box>
         </Box>

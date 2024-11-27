@@ -1,19 +1,19 @@
-import React from 'react';
-import {Navigate, Outlet} from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 type Props = {
     children: React.ReactNode;
+    roles?: string[];
 }
 
-const ProtectedRoute = ({children}: Props) => {
+const ProtectedRoute = ({ children, roles }: Props) => {
 
     const isAuthenticated = localStorage.getItem('accessToken')
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace/>;
+        return <Navigate to="/login" replace />;
     }
 
-    return children ? children : <Outlet/>;
+    return children ? children : <Outlet />;
 };
 
 export default ProtectedRoute;
