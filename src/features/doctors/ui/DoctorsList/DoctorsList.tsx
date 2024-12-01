@@ -18,7 +18,6 @@ const DoctorsList = () => {
     }
 
     const { data, isLoading, isSuccess } = useGetDoctors();
-    console.log(data);
     return (
         <>
             <Loader isLoading={isLoading} />

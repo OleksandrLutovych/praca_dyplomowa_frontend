@@ -1,13 +1,35 @@
 import { Avatar, Button, Card, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { DoctorProfileData } from '../../utils/types';
+import Modal from '../../../../shared/ui/Modal';
+import { DoctorServiceFormData, DoctorServicesForm } from '../../forms';
+import { useCreateDoctorServiceData } from '../../hooks/useCreateDoctorServiceData';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   data: DoctorProfileData
 }
 
 const DoctorProfile: FC<Props> = ({ data }) => {
+
+  const [open, setOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setOpen(true);
+  }
+
+  const queryClient = useQueryClient();
+  const { mutate } = useCreateDoctorServiceData({
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['doctor-profile'] });
+    }
+  });
+
+  const handleFormSubmit = (data: DoctorServiceFormData) => {
+    mutate(data);
+  }
+
   if (!data) return null;
 
   return (
@@ -26,7 +48,6 @@ const DoctorProfile: FC<Props> = ({ data }) => {
       <Card sx={{ p: '31px 20px' }}>
         <Stack direction={'row'} justifyContent={'space-between'}>
           <Typography variant="h5">Dane personalne</Typography>
-          <Button variant="contained">Edytuj</Button>
         </Stack>
 
         <Grid container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg: 18 }} sx={{ mt: 3 }}>
@@ -55,7 +76,6 @@ const DoctorProfile: FC<Props> = ({ data }) => {
       <Card sx={{ p: '31px 20px' }}>
         <Stack direction={'row'} justifyContent={'space-between'}>
           <Typography variant="h5">Dane profesjonalne</Typography>
-          <Button variant="contained">Edytuj</Button>
         </Stack>
         <Grid container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg: 18 }} sx={{ mt: 3 }}>
           <Grid size={6}>
@@ -74,7 +94,7 @@ const DoctorProfile: FC<Props> = ({ data }) => {
       <Card sx={{ p: '31px 20px' }}>
         <Stack direction={'row'} justifyContent={'space-between'}>
           <Typography variant="h5">Moje usługi</Typography>
-          <Button variant="contained">Edytuj</Button>
+          <Button variant="contained" color='success' onClick={handleModalOpen}>Dodaj</Button>
         </Stack>
         <Grid container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12, lg: 18 }} sx={{ mt: 3 }}>
           {
@@ -89,6 +109,12 @@ const DoctorProfile: FC<Props> = ({ data }) => {
 
         </Grid>
       </Card>
+      <Modal handleClose={() => setOpen(false)} open={open} >
+        <Stack>
+          <Typography variant="h5" mb={5}>Dodaj usługę</Typography>
+          <DoctorServicesForm handleFormSubmit={handleFormSubmit} />
+        </Stack>
+      </Modal>
     </Stack>
   );
 };

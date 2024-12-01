@@ -1,5 +1,11 @@
-import LoginPage from './LoginPage';
-import RegisterPage from './RegisterPage';
-import ActivateAccountPage from "./ActivateAccountPage";
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
+import ActivateDoctorAccount from "./ActivateDoctorAccount";
+import ActivatePatientAccount from "./ActivatePatientAccount";
 
-export {LoginPage, RegisterPage, ActivateAccountPage};
+export {
+  LoginPage,
+  RegisterPage,
+  ActivateDoctorAccount,
+  ActivatePatientAccount,
+};

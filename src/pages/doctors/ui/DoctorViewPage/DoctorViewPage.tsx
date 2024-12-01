@@ -1,43 +1,36 @@
+import { Container, Divider, Paper, Stack, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useDoctor } from "../../../../features/doctors/hooks/useDoctor";
-import Calendar from 'react-calendar';
-import { useState } from "react";
-import { Box, Button, Container, Divider, FormControl, InputLabel, MenuItem, Paper, Select, Stack, Typography } from "@mui/material";
-import { CreateAppointmentForm, CreateAppointmentFormData } from "../../../../features/doctors/forms";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
 import { VisitApi } from "../../../../features/doctors/api/visit-api";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+import { AfterCreateVisitCard } from "../../components";
+import { Visit } from "../../utils/types";
+import { CreateAppointmentForm, CreateAppointmentFormData } from "../../../../features/doctors/forms";
 
 const DoctorViewPage = () => {
   const { id } = useParams();
   const { data, isLoading } = useDoctor({ id: Number(id) });
-  const [value, onChange] = useState<Value>(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedProcedure, setSelectedProcedure] = useState('');
 
+  const queryClient = useQueryClient();
   const {
     mutate,
     error,
     isError,
     isSuccess,
     isPending,
-  } = useMutation<unknown, AxiosError, CreateAppointmentFormData>({
+    data: visitData,
+  } = useMutation<AxiosResponse<Visit>, AxiosError, CreateAppointmentFormData>({
     mutationKey: ['visit', id],
     mutationFn: (data) => VisitApi.create({ id: Number(id), value: data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['available-times'] })
+    }
   });
-
-
-  const handleFormSubmit = (values: CreateAppointmentFormData) => {
-    return mutate(values);
-  };
 
   return (
     <Container maxWidth="xl">
-      <Paper elevation={3} sx={{ padding: 3 }}>
+      {!isSuccess && <Paper elevation={3} sx={{ padding: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent={'space-between'}>
           <Stack sx={{ width: '50%' }}>
             <Typography variant="h5">Dr. {" "}
@@ -52,11 +45,13 @@ const DoctorViewPage = () => {
           <Stack sx={{ width: '50%' }}>
 
             <Typography variant="h6">Umów się na wizytę</Typography>
-            <CreateAppointmentForm handleFormSubmit={handleFormSubmit} />
+            <CreateAppointmentForm mutate={mutate} />
           </Stack>
 
         </Stack>
-      </Paper>
+      </Paper>}
+
+      {isSuccess && <AfterCreateVisitCard data={visitData.data} />}
     </Container>
   )
 

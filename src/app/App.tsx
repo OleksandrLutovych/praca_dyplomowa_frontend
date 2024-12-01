@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { ActivateAccountPage, LoginPage, RegisterPage } from '../pages/auth/ui';
+import { ActivateDoctorAccount, ActivatePatientAccount, LoginPage, RegisterPage } from '../pages/auth/ui';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '../shared/api/query-client.ts';
 import ProtectedRoute from "../pages/auth/routes/ProtectedRoute.tsx";
@@ -16,6 +16,7 @@ import { Dashboard } from '../pages/dashboard/ui/index.ts';
 import { RxDashboard as DashboardIcon, RxCalendar as CalendarIcon } from "react-icons/rx";
 import { DoctorsListPage, DoctorViewPage } from '../pages/doctors/ui/index.ts';
 import { Roles } from '../entities/user/enums.ts';
+import { CalendarPage } from '../features/my-calendar/pages/index.ts';
 
 function App() {
 
@@ -35,7 +36,8 @@ function App() {
                         <Route path={'/login'} element={<LoginPage />} />
                         <Route path={'/register'} element={<RegisterPage />} />
                         <Route path={'/doctor-register'} element={<DoctorRegisterPage />} />
-                        <Route path={'/activate-account/:id'} element={<ActivateAccountPage />} />
+                        <Route path={'/activate-doctor/:id'} element={<ActivateDoctorAccount />} />
+                        <Route path={'/activate-patient/:id'} element={<ActivatePatientAccount />} />
                         <Route path={'/dashboard/*'} element={
                             <ProtectedRoute>
                                 <DashboardLayout menuItems={menuItems}>
@@ -47,6 +49,7 @@ function App() {
                             <Route path={'doctors'} element={<DoctorsListPage />} />
                             <Route path={'doctors/:id'} element={<DoctorViewPage />} />
                             <Route path={'profile'} element={<MyProfile />} />
+                            <Route path={'calendar'} element={<CalendarPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

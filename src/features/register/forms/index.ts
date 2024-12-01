@@ -1,4 +1,5 @@
-import { RegisterForm } from './RegisterForm';
-import { StepperRegisterForm } from './StepperRegisterForm';
+import { RegisterForm } from "./RegisterForm";
+import { StepperRegisterForm } from "./StepperRegisterForm";
+import PatientActivateForm from "./PatientActivateForm";
 
-export { RegisterForm, StepperRegisterForm };
+export { RegisterForm, StepperRegisterForm, PatientActivateForm };

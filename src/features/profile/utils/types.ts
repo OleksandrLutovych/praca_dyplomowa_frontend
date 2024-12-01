@@ -19,4 +19,16 @@ export interface DoctorProfileData {
   }[];
 }
 
-export interface PatientProfileData {}
+export interface PatientProfileData {
+  personalData: {
+    name: string;
+    lastName: string;
+  };
+  contactData: {
+    email: string;
+    phone: string;
+  };
+  age: string;
+  pesel: string;
+  address: string;
+}

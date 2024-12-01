@@ -1,37 +1,35 @@
-import { Controller, useForm } from "react-hook-form";
-import CreateAppointmentFormData from "./types";
-import { FC, useState } from "react";
-import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import Calendar from "react-calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { defaultValues, schema } from "./config";
-import { VisitSubType, VisitType } from "../../../../entities/visits/enums";
-import { useQuery } from "@tanstack/react-query";
-import { DoctorsApi } from "../../api";
-import { useParams } from "react-router-dom";
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { UseMutateFunction, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { endOfMonth, getHours, isPast, isSameDay, isWeekend, setHours, startOfMonth } from "date-fns";
+import { FC, useMemo, useState } from "react";
+import Calendar from "react-calendar";
+import { Controller, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import { DoctorService } from "../../../../entities/doctor-service/types";
+import { DoctorsApi } from "../../api";
+import { VisitApi } from "../../api/visit-api";
+import { visitSubTypes, visitTypes } from "../../utils/options";
+import { defaultValues, schema } from "./config";
+import CreateAppointmentFormData from "./types";
 
 type Props = {
-  handleFormSubmit: (data: CreateAppointmentFormData) => void;
+  mutate: UseMutateFunction<unknown, AxiosError, CreateAppointmentFormData, unknown>
 }
 
-const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
+const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
 
   const params = useParams();
-
   const { id } = params;
 
-  console.log(id)
-  const [initialValue, onChange] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date())
+  const [selectedHour, setSelectedHour] = useState<number | null>(null)
+
   const { handleSubmit, control } = useForm<CreateAppointmentFormData>({
     resolver: zodResolver(schema),
     defaultValues,
   });
-  const procedures = ['Konsultacja', 'USG'];
-  const times = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
-  const visitTypes = () => Object.entries(VisitType).map(([key, value]) => value);
-  const visitSubTypes = () => Object.entries(VisitSubType).map(([key, value]) => value);
 
   const { data } = useQuery<unknown, AxiosError, DoctorService[]>({
     queryKey: ['procedures', id],
@@ -44,7 +42,38 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
     }
   })
 
-  console.log(data)
+  const { data: available } = useQuery<unknown, AxiosError, Date[]>({
+    queryKey: ['available-times', id],
+    queryFn: async () => {
+      const response = VisitApi.available({ id: Number(id) });
+
+      const { data } = await response;
+
+      return data;
+    }
+  })
+
+  const availableHours = useMemo(() => {
+
+    return available?.filter((availableDate) =>
+      isSameDay(date, availableDate)
+    ).map((date) => getHours(date))
+
+  }, [available, date])
+
+
+
+
+  const handleFormSubmit = (values: CreateAppointmentFormData) => {
+    if (!selectedHour) {
+      throw new Error('Select hour!')
+    }
+    values.date = setHours(date, selectedHour);
+
+    return mutate(values);
+  };
+
+  const hasAvailableHours = (date: Date) => (available?.filter((availableDate) => isSameDay(date, availableDate)).length ?? 0) > 0
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}
@@ -52,16 +81,16 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
 
       <Controller name={'type'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
         <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
-          <InputLabel id="procedure-label">Wybierz typ wizyty</InputLabel>
+          <InputLabel id="procedure-label">Wybierz rodzaj</InputLabel>
           <Select
             labelId="procedure-label"
             label="Wybierz zabieg"
             value={value}
             onChange={onChange}
           >
-            {visitTypes().map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
+            {visitTypes.map(({ key, label }) => (
+              <MenuItem key={key} value={key}>
+                {label}
               </MenuItem>
             ))}
           </Select>
@@ -70,16 +99,16 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
       )} />
       <Controller name={'subType'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
         <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
-          <InputLabel id="procedure-label">Wybierz typ wizyty</InputLabel>
+          <InputLabel id="procedure-label">Wybierz typ</InputLabel>
           <Select
             labelId="procedure-label"
             label="Wybierz zabieg"
             value={value}
             onChange={onChange}
           >
-            {visitSubTypes().map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
+            {visitSubTypes.map(({ key, label }) => (
+              <MenuItem key={key} value={key}>
+                {label}
               </MenuItem>
             ))}
           </Select>
@@ -95,7 +124,7 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
             value={value}
             onChange={onChange}
           >
-            {data && data.map(({ id, price, service }) => (
+            {data?.map(({ id, price, service }) => (
               <MenuItem key={service} value={id}>
                 {service}  {price} zł
               </MenuItem>
@@ -115,22 +144,37 @@ const CreateAppointmentForm: FC<Props> = ({ handleFormSubmit }) => {
       <Controller name={'date'} control={control} render={
         ({ field: { onChange, value }, fieldState: { error } }) => {
           return (
-            <Calendar onChange={onChange} value={value as Date}
-            // tileDisabled={({ date, view }) => view === 'month' && date < new Date()} 
-            />
+            <>
+              <Calendar
+                onChange={onChange}
+                value={value as Date}
+                view="month"
+                locale="pl-PL"
+                onClickDay={(date) => setDate(date)}
+                activeStartDate={new Date()}
+                allowPartialRange={false}
+                minDate={startOfMonth(new Date())}
+                maxDate={endOfMonth(new Date())}
+                tileDisabled={({ date }) => isWeekend(date) || isPast(date) || !hasAvailableHours(date)}
+              />
+              {error?.message}
+            </>
+
           )
         }
       }
       />
       <FormControl fullWidth sx={{ mt: 2 }}>
-        <InputLabel id="procedure-label">Godzina wizyty</InputLabel>
+        <InputLabel>Godzina wizyty</InputLabel>
         <Select
-          labelId="procedure-label"
           label="Godzina wizyty"
+          onChange={(e) => setSelectedHour(e.target.value as number)}
+          disabled={isWeekend(date) || isPast(date) || !date || !availableHours}
+          required
         >
-          {times.map((procedure) => (
-            <MenuItem key={procedure} value={procedure}>
-              {procedure}
+          {availableHours?.map((hour) => (
+            <MenuItem key={hour} value={hour}>
+              {hour}:00
             </MenuItem>
           ))}
         </Select>

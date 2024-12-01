@@ -14,3 +14,10 @@ export interface UserWithoutSensitiveFields {
   dateRegistred: Date;
   isVerified: boolean;
 }
+
+type SimpleUser = {
+  firstName: string;
+  lastName: string;
+};
+
+export type { SimpleUser };

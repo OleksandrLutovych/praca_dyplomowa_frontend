@@ -1,14 +1,12 @@
-import { Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { DoctorProfileData } from "../../../../entities/doctor/types";
-import { DoctorProfileApi, PatientProfileApi } from "../../api";
-import { DoctorProfile, PatientProfile } from "../../components";
-import { Loader } from "../../../../shared/ui";
+import { DoctorProfileApi, PatientProfileApi } from '../api';
+import { useQuery } from '@tanstack/react-query';
+import { DoctorProfileData } from '../utils/types';
+import { Typography } from '@mui/material';
+import { Loader } from '../../../shared/ui';
+import { AxiosError } from 'axios';
+import { DoctorProfile, PatientProfile } from '../components';
 
-
-const MyProfile = () => {
-
+const ProfilePage = () => {
   const { data, isSuccess, isLoading } = useQuery<unknown, AxiosError, DoctorProfileData>({
     queryKey: ['doctor-profile'],
     queryFn: async () => {
@@ -25,19 +23,16 @@ const MyProfile = () => {
     }
   })
 
-  console.log("doctor", data)
-  console.log("patient", patientData)
-
 
   return (
     <>
       <Typography variant="h4">Mój profil</Typography>
       <Loader isLoading={isLoading && isPatientDataLoading} />
-      {patientData && !isPatientDataLoading && <PatientProfile data={patientData} />}
+      {patientData && !isPatientDataLoading && <PatientProfile />}
       {data && !isLoading && <DoctorProfile data={data} />}
 
     </>
   );
 };
 
-export default MyProfile;
+export default ProfilePage;

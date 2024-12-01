@@ -1,3 +1,4 @@
-import activateAccountApi from './activate-account-api';
+import activateDoctorApi from "./activate-doctor-api";
+import activatePatientApi from "./activate-patient-api";
 
-export {activateAccountApi};
+export { activateDoctorApi, activatePatientApi };
