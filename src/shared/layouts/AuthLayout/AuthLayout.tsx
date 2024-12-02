@@ -1,7 +1,7 @@
-import {Card} from "../../ui/components";
-import {Logo} from "../../ui";
-import {Backdrop, CircularProgress} from "@mui/material";
-import {FC} from "react";
+import { Card } from "../../ui/components";
+import { Logo } from "../../ui";
+import { Backdrop, CircularProgress } from "@mui/material";
+import { FC } from "react";
 import SignInContainer from "./SignInContainer.ts";
 
 type Props = {
@@ -9,19 +9,19 @@ type Props = {
     isLoading: boolean;
 };
 
-const AuthLayout: FC<Props> = ({children, isLoading}) => {
+const AuthLayout: FC<Props> = ({ children, isLoading }) => {
     return (
         <SignInContainer direction="column" justifyContent="space-between">
             <Card variant="outlined">
-                <Logo/>
+                <Logo />
 
                 {children}
             </Card>
             <Backdrop
-                sx={(theme) => ({color: '#fff', zIndex: theme.zIndex.drawer + 1})}
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
                 open={isLoading}
             >
-                <CircularProgress color="inherit"/>
+                <CircularProgress color="inherit" />
             </Backdrop>
         </SignInContainer>
     );

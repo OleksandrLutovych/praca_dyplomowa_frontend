@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { DoctorProfileData } from "../../../../entities/doctor/types";
 import { DoctorProfileApi, PatientProfileApi } from "../../api";
 import { DoctorProfile, PatientProfile } from "../../components";
-import { Loader } from "../../../../shared/ui";
+import { Breadcrumbs, Loader } from "../../../../shared/ui";
 
 
 const MyProfile = () => {
@@ -31,6 +31,8 @@ const MyProfile = () => {
 
   return (
     <>
+      <Breadcrumbs />
+
       <Typography variant="h4">Mój profil</Typography>
       <Loader isLoading={isLoading && isPatientDataLoading} />
       {patientData && !isPatientDataLoading && <PatientProfile data={patientData} />}

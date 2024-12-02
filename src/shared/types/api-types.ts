@@ -9,3 +9,8 @@ export type UniversalListResponse<T> = {
     totalPerPage: number;
   };
 };
+
+export type BackendError = {
+  error: string;
+  status: number;
+};

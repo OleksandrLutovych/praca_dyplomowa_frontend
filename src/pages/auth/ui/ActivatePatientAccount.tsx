@@ -36,8 +36,12 @@ const ActivatePatientAccount = () => {
   }
   return (
     <AuthLayout isLoading={isPending}>
-      <Typography variant='h5' sx={{ textAlign: "center" }}>Wypeij formularz dla zakoczenia rejestracji</Typography>
-      {!isSuccess && <PatientActivateForm handleFormSubmit={handleFormSubmit} />}
+      {!isSuccess &&
+        <>
+          <Typography variant='h5' sx={{ textAlign: "center" }}>Wypeij formularz dla zakończenia rejestracji</Typography>
+          <PatientActivateForm handleFormSubmit={handleFormSubmit} />
+        </>
+      }
 
       {isSuccess &&
         (<Alert variant="filled" severity="success">

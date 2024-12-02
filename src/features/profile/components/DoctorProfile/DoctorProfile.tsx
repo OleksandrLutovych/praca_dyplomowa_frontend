@@ -23,6 +23,7 @@ const DoctorProfile: FC<Props> = ({ data }) => {
   const { mutate } = useCreateDoctorServiceData({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctor-profile'] });
+      setOpen(false);
     }
   });
 

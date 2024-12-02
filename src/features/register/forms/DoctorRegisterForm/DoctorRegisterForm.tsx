@@ -50,7 +50,7 @@ const DoctorRegisterForm = () => {
                         sx={{ mb: 2 }}
                     >
                         {error && error?.message}
-                        {isSuccess && 'Konto zostało utworzone, możesz się zalogować'}
+                        {isSuccess && 'Konto zostało utworzone. Sprawdź swoją skrzynkę mailową, aby aktywować konto.'}
                     </Alert>
                 </Collapse>
                 <Typography

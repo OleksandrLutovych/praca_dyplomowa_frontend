@@ -77,8 +77,32 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}
-      style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 10, alignItems: 'center' }}>
+      style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 5, alignItems: 'center' }}>
 
+      <Controller name={'date'} control={control} render={
+        ({ field: { onChange, value }, fieldState: { error } }) => {
+          return (
+            <>
+              <Calendar
+                onChange={onChange}
+                value={value as Date}
+                view="month"
+                locale="pl-PL"
+                onClickDay={(date) => setDate(date)}
+                activeStartDate={new Date()}
+                allowPartialRange={false}
+                minDate={startOfMonth(new Date())}
+                maxDate={endOfMonth(new Date())}
+                tileDisabled={({ date }) => isWeekend(date) || isPast(date) || !hasAvailableHours(date)}
+                
+              />
+              {error?.message}
+            </>
+
+          )
+        }
+      }
+      />
       <Controller name={'type'} control={control} render={({ field: { onChange, value, }, fieldState: { error } }) => (
         <FormControl fullWidth sx={{ mt: 2 }} error={!!error}>
           <InputLabel id="procedure-label">Wybierz rodzaj</InputLabel>
@@ -141,29 +165,7 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
         </FormControl>
       )} />
 
-      <Controller name={'date'} control={control} render={
-        ({ field: { onChange, value }, fieldState: { error } }) => {
-          return (
-            <>
-              <Calendar
-                onChange={onChange}
-                value={value as Date}
-                view="month"
-                locale="pl-PL"
-                onClickDay={(date) => setDate(date)}
-                activeStartDate={new Date()}
-                allowPartialRange={false}
-                minDate={startOfMonth(new Date())}
-                maxDate={endOfMonth(new Date())}
-                tileDisabled={({ date }) => isWeekend(date) || isPast(date) || !hasAvailableHours(date)}
-              />
-              {error?.message}
-            </>
 
-          )
-        }
-      }
-      />
       <FormControl fullWidth sx={{ mt: 2 }}>
         <InputLabel>Godzina wizyty</InputLabel>
         <Select

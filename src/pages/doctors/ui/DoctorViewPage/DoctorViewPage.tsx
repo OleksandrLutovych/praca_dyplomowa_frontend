@@ -7,6 +7,8 @@ import { VisitApi } from "../../../../features/doctors/api/visit-api";
 import { AfterCreateVisitCard } from "../../components";
 import { Visit } from "../../utils/types";
 import { CreateAppointmentForm, CreateAppointmentFormData } from "../../../../features/doctors/forms";
+import { ApiError, Breadcrumbs, Loader } from "../../../../shared/ui";
+import { BackendError } from "../../../../shared/types/api-types";
 
 const DoctorViewPage = () => {
   const { id } = useParams();
@@ -20,7 +22,7 @@ const DoctorViewPage = () => {
     isSuccess,
     isPending,
     data: visitData,
-  } = useMutation<AxiosResponse<Visit>, AxiosError, CreateAppointmentFormData>({
+  } = useMutation<AxiosResponse<Visit>, AxiosError<BackendError>, CreateAppointmentFormData>({
     mutationKey: ['visit', id],
     mutationFn: (data) => VisitApi.create({ id: Number(id), value: data }),
     onSuccess: () => {
@@ -30,21 +32,23 @@ const DoctorViewPage = () => {
 
   return (
     <Container maxWidth="xl">
+      <Breadcrumbs />
+
+      <ApiError error={error} isError={isError} />
+      <Loader isLoading={isPending || isLoading} />
+
       {!isSuccess && <Paper elevation={3} sx={{ padding: 3 }}>
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent={'space-between'}>
-          <Stack sx={{ width: '50%' }}>
+        <Stack direction="row" spacing={5} alignItems="center" justifyContent={'space-between'}>
+          <Stack sx={{ width: '40%' }}>
             <Typography variant="h5">Dr. {" "}
               {data?.user.firstName} {data?.user.lastName}
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 2 }}>
+              {data?.proffesion}
             </Typography>
           </Stack>
-          <Divider />
-          <Stack sx={{ width: '50%' }}>
-
-            <Typography variant="h6">Umów się na wizytę</Typography>
+          <Divider sx={{ color: "red", height: "600px" }} orientation="vertical" />
+          <Stack sx={{ width: '60%' }}>
             <CreateAppointmentForm mutate={mutate} />
           </Stack>
 

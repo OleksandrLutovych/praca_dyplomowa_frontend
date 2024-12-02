@@ -16,10 +16,10 @@ import {
 import { ReactNode, useState } from "react";
 import { CiLogout as LogoutIcon, CiMenuFries as MenuIcon } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import { Roles } from "../../../entities/user/enums";
+import { queryClient } from "../../api/query-client";
 import { useUserData } from "../../hooks/useUserData";
 import { AppBar, Drawer, DrawerHeader } from "../../ui/components";
-import { Roles } from "../../../entities/user/enums";
-import { queryCache, queryClient } from "../../api/query-client";
 
 type Props = {
     children: JSX.Element
@@ -48,11 +48,8 @@ const DashboardLayout = ({ children, menuItems }: Props) => {
         navigate('/login');
     }
 
-    console.log(data?.roles)
-
-
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', bgcolor: "#E5E5E5", minHeight: '100vh' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open}>
                 <Toolbar>

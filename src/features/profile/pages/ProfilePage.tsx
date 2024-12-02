@@ -2,7 +2,7 @@ import { DoctorProfileApi, PatientProfileApi } from '../api';
 import { useQuery } from '@tanstack/react-query';
 import { DoctorProfileData } from '../utils/types';
 import { Typography } from '@mui/material';
-import { Loader } from '../../../shared/ui';
+import { Breadcrumbs, Loader } from '../../../shared/ui';
 import { AxiosError } from 'axios';
 import { DoctorProfile, PatientProfile } from '../components';
 
@@ -28,7 +28,7 @@ const ProfilePage = () => {
     <>
       <Typography variant="h4">Mój profil</Typography>
       <Loader isLoading={isLoading && isPatientDataLoading} />
-      {patientData && !isPatientDataLoading && <PatientProfile />}
+      {patientData && !isPatientDataLoading && <PatientProfile data={patientData} />}
       {data && !isLoading && <DoctorProfile data={data} />}
 
     </>

@@ -17,6 +17,7 @@ import { RxDashboard as DashboardIcon, RxCalendar as CalendarIcon } from "react-
 import { DoctorsListPage, DoctorViewPage } from '../pages/doctors/ui/index.ts';
 import { Roles } from '../entities/user/enums.ts';
 import { CalendarPage } from '../features/my-calendar/pages/index.ts';
+import { DoctorConsultViewPage } from '../features/doctor-consults/pages/index.ts';
 
 function App() {
 
@@ -50,6 +51,8 @@ function App() {
                             <Route path={'doctors/:id'} element={<DoctorViewPage />} />
                             <Route path={'profile'} element={<MyProfile />} />
                             <Route path={'calendar'} element={<CalendarPage />} />
+                            <Route path={'consults'} element={<div>Consults</div>} />
+                            <Route path={'consults/:id'} element={<DoctorConsultViewPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
