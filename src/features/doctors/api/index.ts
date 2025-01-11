@@ -5,7 +5,7 @@ import { UniversalListResponse } from "../../../shared/types/api-types";
 import { DoctorService } from "../../../entities/doctor-service/types";
 
 const getMany = () => {
-  return API.request<AxiosResponse<UniversalListResponse<Doctor>>>({
+  return API.request<UniversalListResponse<Doctor>>({
     method: "GET",
     url: "/doctors",
     params: {},

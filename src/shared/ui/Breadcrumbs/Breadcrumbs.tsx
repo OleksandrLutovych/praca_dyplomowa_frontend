@@ -1,25 +1,30 @@
 import { Typography, Breadcrumbs as MuiBreadcrumbs, Link, Box } from "@mui/material";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
-type Props = {
-
+type BreadCrumbItem = {
+  label: string
+  to?: string,
+  isCurrentPage?: boolean
 }
 
-const Breadcrumbs: FC<Props> = () => {
+type Props = {
+  items: BreadCrumbItem[]
+}
+
+const Breadcrumbs: FC<Props> = ({ items }) => {
   return (
     <Box sx={{ mb: 5 }}>
       <MuiBreadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          MUI
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="/material-ui/getting-started/installation/"
-        >
-          Core
-        </Link>
-        <Typography sx={{ color: 'text.primary' }}>Breadcrumbs</Typography>
+        {items.map(({ label, isCurrentPage, to }, index) => {
+          if (!to) {
+            return <Typography key={index} sx={{ color: 'text.primary' }}>{label}</Typography>
+          }
+          return (
+            <Fragment key={index}>
+              {isCurrentPage ? <Typography sx={{ color: 'text.primary' }}>{label}</Typography> : <Link underline="hover" color="inherit" href={to}>{label}</Link>}
+            </Fragment>
+          )
+        })}
       </MuiBreadcrumbs>
     </Box>
 

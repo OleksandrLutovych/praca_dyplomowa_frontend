@@ -18,12 +18,17 @@ import { DoctorsListPage, DoctorViewPage } from '../pages/doctors/ui/index.ts';
 import { Roles } from '../entities/user/enums.ts';
 import { CalendarPage } from '../features/my-calendar/pages/index.ts';
 import { DoctorConsultViewPage } from '../features/doctor-consults/pages/index.ts';
+import DoctorAvailabilityPage from '../features/doctor-availability/pages/DoctorAvailabilityPage.tsx';
+import DoctorAvailabilityCreatePage from '../features/doctor-availability/pages/DoctorAvailabilityCreatePage.tsx';
+import DoctorAvailabilityEditPage from '../features/doctor-availability/pages/DoctorAvailabilityEditPage.tsx';
+import DoctorAvailabilityCreateCustomPage from '../features/doctor-availability/pages/DoctorAvailabilityCreateCustomPage.tsx';
 
 function App() {
 
     const menuItems = [
         { title: "Strona Główna", path: "/dashboard", icon: <DashboardIcon size={25} /> },
         { title: "Kalendarz", path: "calendar", roles: [Roles.DOCTOR], icon: <CalendarIcon size={25} /> },
+        { title: "Czas pracy", path: "availability", roles: [Roles.DOCTOR], icon: <CalendarIcon size={25} /> },
         { title: "Lekarze", path: "doctors", roles: [Roles.PATIENT], icon: <DoctorIcon size={25} /> },
         { title: "Mój profil", path: "profile", icon: <ProfileIcon size={25} /> },
     ]
@@ -53,6 +58,10 @@ function App() {
                             <Route path={'calendar'} element={<CalendarPage />} />
                             <Route path={'consults'} element={<div>Consults</div>} />
                             <Route path={'consults/:id'} element={<DoctorConsultViewPage />} />
+                            <Route path={'availability'} element={<DoctorAvailabilityPage />} />
+                            <Route path={'availability/add'} element={<DoctorAvailabilityCreatePage />} />
+                            <Route path={'availability/edit'} element={<DoctorAvailabilityEditPage />} />
+                            <Route path={'availability/add-custom'} element={<DoctorAvailabilityCreateCustomPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

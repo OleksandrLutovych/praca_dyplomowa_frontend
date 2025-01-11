@@ -13,7 +13,6 @@ type Props = {
 const NumberInput: FC<Props> = ({ name, label, defaultValue, control, title }) => {
   return (
     <Controller name={name} control={control}
-
       render={
         ({ field: { onChange, value, }, fieldState: { error } }) => (
           <FormControl sx={{ width: "100%" }}>

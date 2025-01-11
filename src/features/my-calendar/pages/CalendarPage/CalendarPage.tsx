@@ -1,4 +1,4 @@
-import { Box, Card, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Divider, Stack, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { addHours } from 'date-fns';
@@ -43,12 +43,14 @@ const CalendarPage = () => {
     navigate(`/dashboard/consults/${id}`)
   }
 
+  console.log(data)
 
   return (
     <>
       <Breadcrumbs />
       <ApiError error={error} isError={isError} />
-      < Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading} />
+
 
       <Stack direction={'row'} gap={2}>
         <Card sx={{
@@ -61,6 +63,7 @@ const CalendarPage = () => {
             startAccessor={(event) => { return new Date(event.start ?? '') }}
             endAccessor={(event) => { return new Date(event.end ?? '') }}
             onDoubleClickEvent={(event) => handleEventClick(event.id)}
+            onRangeChange={(range) => console.log(range)}
           />
         </Card>
 

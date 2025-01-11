@@ -94,7 +94,7 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
                 minDate={startOfMonth(new Date())}
                 maxDate={endOfMonth(new Date())}
                 tileDisabled={({ date }) => isWeekend(date) || isPast(date) || !hasAvailableHours(date)}
-                
+
               />
               {error?.message}
             </>

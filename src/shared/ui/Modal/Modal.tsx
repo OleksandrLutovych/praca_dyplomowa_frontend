@@ -8,8 +8,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  borderRadius: '10px',
   p: 4,
 };
 
@@ -22,18 +21,16 @@ type Props = {
 const Modal: FC<Props> = ({ children, handleClose, open }) => {
 
   return (
-    <div>
-      <MuiModal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={style}>
-          {children}
-        </Box>
-      </MuiModal>
-    </div>
+    <MuiModal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+    >
+      <Box sx={style}>
+        {children}
+      </Box>
+    </MuiModal>
   );
 };
 
