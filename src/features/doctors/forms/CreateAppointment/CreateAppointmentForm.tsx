@@ -13,6 +13,7 @@ import { VisitApi } from "../../api/visit-api";
 import { visitSubTypes, visitTypes } from "../../utils/options";
 import { defaultValues, schema } from "./config";
 import CreateAppointmentFormData from "./types";
+import { DoctorAvailability } from "../../utils/types";
 
 type Props = {
   mutate: UseMutateFunction<unknown, AxiosError, CreateAppointmentFormData, unknown>
@@ -42,7 +43,7 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
     }
   })
 
-  const { data: available } = useQuery<unknown, AxiosError, Date[]>({
+  const { data: available } = useQuery<unknown, AxiosError, DoctorAvailability[]>({
     queryKey: ['available-times', id],
     queryFn: async () => {
       const response = VisitApi.available({ id: Number(id) });
@@ -53,14 +54,21 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
     }
   })
 
-  const availableHours = useMemo(() => {
+  const availableDays = useMemo(() => available?.map((days) => days.date), [available])
 
-    return available?.filter((availableDate) =>
-      isSameDay(date, availableDate)
-    ).map((date) => getHours(date))
+  const availableHours = useMemo(() => {
+    if (!date || !available) {
+      return null
+    }
+    const availableDate = available.find((available) => isSameDay(date, new Date(available.date)))
+
+    if (!availableDate) {
+      return null
+    }
+
+    return availableDate.availableTimes
 
   }, [available, date])
-
 
 
 
@@ -68,12 +76,15 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
     if (!selectedHour) {
       throw new Error('Select hour!')
     }
-    values.date = setHours(date, selectedHour);
+    const [hours, minutes] = selectedHour.toString().split(':').map(Number);
+    values.date = setHours(date, hours).setMinutes(minutes)
 
+    // console.log(selectedHour)
+    console.log(values)
     return mutate(values);
   };
 
-  const hasAvailableHours = (date: Date) => (available?.filter((availableDate) => isSameDay(date, availableDate)).length ?? 0) > 0
+  const hasAvailableHours = (date: Date) => (availableDays?.filter((availableDate) => isSameDay(date, availableDate)).length ?? 0) > 0
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}
@@ -176,7 +187,7 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
         >
           {availableHours?.map((hour) => (
             <MenuItem key={hour} value={hour}>
-              {hour}:00
+              {hour}
             </MenuItem>
           ))}
         </Select>

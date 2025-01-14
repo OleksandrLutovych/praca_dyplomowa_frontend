@@ -32,7 +32,7 @@ const DoctorViewPage = () => {
 
   return (
     <Container maxWidth="xl">
-      <Breadcrumbs />
+      <Breadcrumbs items={[]} />
 
       <ApiError error={error} isError={isError} />
       <Loader isLoading={isPending || isLoading} />

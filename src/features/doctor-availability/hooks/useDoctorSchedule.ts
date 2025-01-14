@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
+import { DoctorAvailability } from "../utils/types";
 import { AxiosError } from "axios";
 import { BackendError } from "../../../shared/types/api-types";
 import { DoctorScheduleApi } from "../api/doctor-schedule-api";
-import { DoctorAvailability } from "../utils/types";
 
-const useDoctorDefaultSchedule = () => {
+const useDoctorSchedule = (start: Date, end: Date) => {
   const query = useQuery<
     unknown,
     AxiosError<BackendError>,
     DoctorAvailability[]
   >({
-    queryKey: ["doctor-schedule"],
+    queryKey: ["doctor-schedule", start, end],
     queryFn: async () => {
-      const { data } = await DoctorScheduleApi.get();
+      const { data } = await DoctorScheduleApi.getForRange(start, end);
 
       return data;
     },
@@ -21,4 +21,4 @@ const useDoctorDefaultSchedule = () => {
   return query;
 };
 
-export default useDoctorDefaultSchedule;
+export default useDoctorSchedule;

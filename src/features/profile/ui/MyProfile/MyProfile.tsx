@@ -31,7 +31,7 @@ const MyProfile = () => {
 
   return (
     <>
-      <Breadcrumbs />
+      <Breadcrumbs items={[]}/>
 
       <Typography variant="h4">Mój profil</Typography>
       <Loader isLoading={isLoading && isPatientDataLoading} />

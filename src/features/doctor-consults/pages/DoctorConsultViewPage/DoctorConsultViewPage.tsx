@@ -11,11 +11,10 @@ const DoctorConsultViewPage = () => {
   const parseId = Number(id)
 
   const { data, error, isLoading, isError } = useConsult({ id: parseId });
-  console.log(data)
 
   return (
     <>
-      <Breadcrumbs />
+      <Breadcrumbs items={[]} />
       <ApiError error={error} isError={isError} />
       <Loader isLoading={isLoading} />
       <Card sx={{ p: '25px', mx: 'auto' }}>

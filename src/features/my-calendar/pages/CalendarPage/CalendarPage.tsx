@@ -47,7 +47,7 @@ const CalendarPage = () => {
 
   return (
     <>
-      <Breadcrumbs />
+      <Breadcrumbs items={[]} />
       <ApiError error={error} isError={isError} />
       <Loader isLoading={isLoading} />
 

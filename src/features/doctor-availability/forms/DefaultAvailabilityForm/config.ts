@@ -1,25 +1,24 @@
 import { z, ZodType } from "zod";
 
 export type DefaultAvailabilityFormData = {
-  schedule: any[];
+  start: Date;
+  end: Date;
   durationInMinutes: number;
 };
 
 export const schema: ZodType<DefaultAvailabilityFormData> = z.object({
-  schedule: z
-    .array(
-      z.object({
-        id: z.string(),
-        title: z.string(),
-        start: z.date(),
-        end: z.date(),
-      })
-    )
-    .min(1, "Musi być wybrany co najmniej 1 dzień."),
   durationInMinutes: z.number().min(10).max(1440),
+  start: z.date(),
+  end: z.date(),
 });
 
-export const defaultValues: DefaultAvailabilityFormData = {
-  schedule: [],
-  durationInMinutes: 30,
+export const defaultValues = (
+  start: Date,
+  end: Date
+): DefaultAvailabilityFormData => {
+  return {
+    durationInMinutes: 30,
+    start,
+    end,
+  };
 };

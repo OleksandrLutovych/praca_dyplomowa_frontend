@@ -1,6 +1,7 @@
 import { Visit } from "../../../pages/doctors/utils/types";
 import { API } from "../../../shared/api";
 import { CreateAppointmentFormData } from "../forms";
+import { DoctorAvailability } from "../utils/types";
 
 const create = async ({
   id,
@@ -17,7 +18,7 @@ const create = async ({
 };
 
 const available = async ({ id }: { id: number }) => {
-  return API.request({
+  return API.request<DoctorAvailability[]>({
     method: "GET",
     url: `/doctors/${id}/available-times`,
   });

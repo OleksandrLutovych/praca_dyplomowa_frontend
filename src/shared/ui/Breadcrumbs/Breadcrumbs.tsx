@@ -13,7 +13,7 @@ type Props = {
 
 const Breadcrumbs: FC<Props> = ({ items }) => {
   return (
-    <Box sx={{ mb: 5 }}>
+    <Box sx={{ mb: 2 }}>
       <MuiBreadcrumbs aria-label="breadcrumb">
         {items.map(({ label, isCurrentPage, to }, index) => {
           if (!to) {

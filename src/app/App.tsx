@@ -10,7 +10,7 @@ import { store } from "./stores/main-store.ts";
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css'
 import { MyProfile } from '../features/profile/ui/index.ts';
-import { FaRegUserCircle as ProfileIcon } from "react-icons/fa";
+import { FaEnvira, FaRegUserCircle as ProfileIcon } from "react-icons/fa";
 import { FaUserDoctor as DoctorIcon } from "react-icons/fa6";
 import { Dashboard } from '../pages/dashboard/ui/index.ts';
 import { RxDashboard as DashboardIcon, RxCalendar as CalendarIcon } from "react-icons/rx";
@@ -20,8 +20,8 @@ import { CalendarPage } from '../features/my-calendar/pages/index.ts';
 import { DoctorConsultViewPage } from '../features/doctor-consults/pages/index.ts';
 import DoctorAvailabilityPage from '../features/doctor-availability/pages/DoctorAvailabilityPage.tsx';
 import DoctorAvailabilityCreatePage from '../features/doctor-availability/pages/DoctorAvailabilityCreatePage.tsx';
-import DoctorAvailabilityEditPage from '../features/doctor-availability/pages/DoctorAvailabilityEditPage.tsx';
 import DoctorAvailabilityCreateCustomPage from '../features/doctor-availability/pages/DoctorAvailabilityCreateCustomPage.tsx';
+import { PatientPersonalVisitsListPage } from '../features/patient-personal-visits/pages/index.ts';
 
 function App() {
 
@@ -30,6 +30,7 @@ function App() {
         { title: "Kalendarz", path: "calendar", roles: [Roles.DOCTOR], icon: <CalendarIcon size={25} /> },
         { title: "Czas pracy", path: "availability", roles: [Roles.DOCTOR], icon: <CalendarIcon size={25} /> },
         { title: "Lekarze", path: "doctors", roles: [Roles.PATIENT], icon: <DoctorIcon size={25} /> },
+        { title: "Moje wizyty", path: "my-visits", roles: [Roles.PATIENT], icon: <FaEnvira size={25} /> },
         { title: "Mój profil", path: "profile", icon: <ProfileIcon size={25} /> },
     ]
 
@@ -60,8 +61,8 @@ function App() {
                             <Route path={'consults/:id'} element={<DoctorConsultViewPage />} />
                             <Route path={'availability'} element={<DoctorAvailabilityPage />} />
                             <Route path={'availability/add'} element={<DoctorAvailabilityCreatePage />} />
-                            <Route path={'availability/edit'} element={<DoctorAvailabilityEditPage />} />
                             <Route path={'availability/add-custom'} element={<DoctorAvailabilityCreateCustomPage />} />
+                            <Route path={'my-visits'} element={<PatientPersonalVisitsListPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

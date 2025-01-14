@@ -33,11 +33,7 @@ const DataTable = <T extends WithId>({ columns, data }: DataTableProps<T>) => {
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {/* {header.column.getCanFilter() ? (
-                            <div>
-                              <Filter column={header.column} table={table} />
-                            </div>
-                          ) : null} */}
+
                         </div>
                       )}
                     </TableCell>
@@ -66,28 +62,6 @@ const DataTable = <T extends WithId>({ columns, data }: DataTableProps<T>) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data.length }]}
-        component="div"
-        count={table.getFilteredRowModel().rows.length}
-        rowsPerPage={pageSize}
-        page={pageIndex}
-        slotProps={{
-          select: {
-            inputProps: { 'aria-label': 'rows per page' },
-            native: true,
-          },
-        }}
-        onPageChange={(_, page) => {
-          table.setPageIndex(page)
-        }}
-        onRowsPerPageChange={e => {
-          const size = e.target.value ? Number(e.target.value) : 10
-          table.setPageSize(size)
-        }}
-        ActionsComponent={TablePaginationActions}
-      /> */}
-      <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre>
     </Box>
   );
 };
