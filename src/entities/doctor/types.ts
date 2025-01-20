@@ -1,11 +1,13 @@
+import { DoctorSpeciality } from "../doctor-speciality/enum";
+
 type Doctor = {
   id: number;
   user: {
     firstName: string;
     lastName: string;
   };
-  proffesion: string;
-  services: string[];
+  proffesion: DoctorSpeciality;
+  services: { id: number; service: string; price: number }[];
   rating: number;
   image: string;
 };

@@ -19,7 +19,6 @@ export const useUpcomingVisits = () => {
           start: event.start,
           end: addHours(event.end, 1),
         })) || [];
-      console.log(response);
       return response;
     },
   });

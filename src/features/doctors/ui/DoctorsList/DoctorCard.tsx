@@ -1,12 +1,13 @@
 import { Avatar, Box, Button, Card, CardContent, Divider, List, ListItem, Rating, Stack, Typography } from "@mui/material";
 import { FC } from "react";
+import { doctorSpecialityLabel } from "../../../../entities/doctor-speciality/options";
+import { DoctorSpeciality } from "../../../../entities/doctor-speciality/enum";
 
 type Props = {
   name: string;
-  proffesion: string;
-  services: string[];
+  proffesion: DoctorSpeciality;
+  services: { id: number, service: string, price: number }[];
   rating: number;
-  image: string;
   onClick: () => void;
 }
 
@@ -19,10 +20,10 @@ const DoctorCard: FC<Props> = ({ name, proffesion, services, rating, onClick }) 
           <Avatar sx={{ bgcolor: 'orange', width: 80, height: 80 }}>N</Avatar>
           <Stack>
             <Typography gutterBottom variant="h6" sx={{ mb: 0 }}>
-              prof. {name}
+              {name}
             </Typography>
             <Typography gutterBottom variant="h6" sx={{ color: '#1976d2' }}>
-              {proffesion}
+              {doctorSpecialityLabel(proffesion)}
             </Typography>
             <Rating
               name="simple-controlled"
@@ -43,23 +44,11 @@ const DoctorCard: FC<Props> = ({ name, proffesion, services, rating, onClick }) 
               sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
               aria-label="contacts"
             >
-              {services.map((service) => (
-                <ListItem disablePadding key={service}>
-                  {service}
+              {services.map(({ id, price, service }) => (
+                <ListItem disablePadding key={id}>
+                  {service} {price} zł
                 </ListItem>
               ))}
-            </List>
-          </Box>
-          <Divider orientation="vertical" sx={{ height: 90 }} />
-          <Box>
-            <Typography gutterBottom variant="h6" component="div" sx={{ opacity: 0.5 }}>
-              Cena:
-            </Typography>
-            <List
-              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-              aria-label="contacts"
-            >
-              od 350 zł
             </List>
           </Box>
         </Stack>

@@ -43,8 +43,6 @@ const CalendarPage = () => {
     navigate(`/dashboard/consults/${id}`)
   }
 
-  console.log(data)
-
   return (
     <>
       <Breadcrumbs items={[]} />

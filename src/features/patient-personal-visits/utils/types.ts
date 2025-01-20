@@ -4,9 +4,11 @@ type PatientPersonalVisit = {
   id: number;
   date: Date;
   doctor: {
-    firstName: string;
-    lastName: string;
     proffesion: string;
+    user: {
+      firstName: string;
+      lastName: string;
+    };
   };
   place: string;
   type: VisitType;

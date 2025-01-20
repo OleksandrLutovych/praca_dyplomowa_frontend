@@ -1,5 +1,5 @@
 import { Alert, Button, Collapse, FormControl, FormLabel, Link, TextField, Typography } from "@mui/material";
-import { Input } from "../../../../shared/form-inputs";
+import { Input, SelectInput } from "../../../../shared/form-inputs";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import { doctorRegisterApi } from "../../api/register-api.ts";
 import { defaultValues, DoctorRegisterFormData, schema } from "./config.ts";
 import { AuthLayout } from "../../../../shared/layouts";
+import { doctorSpecialityOptions } from "../../../../entities/doctor-speciality/options.ts";
 
 const DoctorRegisterForm = () => {
 
@@ -38,6 +39,7 @@ const DoctorRegisterForm = () => {
     });
 
     const handleFormSubmit = (data: DoctorRegisterFormData) => {
+        console.log(data)
         mutate(data);
     };
 
@@ -85,9 +87,14 @@ const DoctorRegisterForm = () => {
                     <Input name={"education"} label={"Wyższa Szkoła Gospodarki"} type={"text"}
                         defaultValue={defaultValues.education}
                         control={control} title={"Wykształcenie"} />
-                    <Input name={"proffesion"} label={"Okulista"} type={"text"}
+                    <SelectInput
+                        name={"proffesion"}
+                        label={"Okulista"}
                         defaultValue={defaultValues.proffesion}
-                        control={control} title={"Specjalizacja"} />
+                        control={control}
+                        title={"Specjalizacja"}
+                        options={doctorSpecialityOptions} />
+
                     <Button
                         type="submit"
                         variant="contained"

@@ -1,0 +1,17 @@
+export enum DoctorSpeciality {
+  PRACTITIONER = "Lekarz rodzinny",
+  CARDIOLOGIST = "Kardiolog",
+  DERMATOLOGIST = "Dermatolog",
+  GYNECOLOGIST = "Ginekolog",
+  INTERNIST = "Internista",
+  NEUROLOGIST = "Neurolog",
+  OPHTHALMOLOGIST = "Okulista",
+  ORTHOPEDIST = "Ortopeda",
+  OTOLARYNGOLOGIST = "Laryngolog",
+  PEDIATRICIAN = "Pediatra",
+  PSYCHIATRIST = "Psychiatra",
+  PSYCHOLOGIST = "Psycholog",
+  UROLOGIST = "Urolog",
+  SURGEON = "Chirurg",
+  DENTIST = "Dentysta",
+}

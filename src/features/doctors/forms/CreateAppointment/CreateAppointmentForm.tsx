@@ -79,8 +79,6 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
     const [hours, minutes] = selectedHour.toString().split(':').map(Number);
     values.date = setHours(date, hours).setMinutes(minutes)
 
-    // console.log(selectedHour)
-    console.log(values)
     return mutate(values);
   };
 

@@ -25,13 +25,9 @@ const MyProfile = () => {
     }
   })
 
-  console.log("doctor", data)
-  console.log("patient", patientData)
-
-
   return (
     <>
-      <Breadcrumbs items={[]}/>
+      <Breadcrumbs items={[]} />
 
       <Typography variant="h4">Mój profil</Typography>
       <Loader isLoading={isLoading && isPatientDataLoading} />

@@ -6,6 +6,7 @@ import Modal from '../../../../shared/ui/Modal';
 import { DoctorServiceFormData, DoctorServicesForm } from '../../forms';
 import { useCreateDoctorServiceData } from '../../hooks/useCreateDoctorServiceData';
 import { useQueryClient } from '@tanstack/react-query';
+import { doctorSpecialityLabel } from '../../../../entities/doctor-speciality/options';
 
 type Props = {
   data: DoctorProfileData
@@ -41,7 +42,7 @@ const DoctorProfile: FC<Props> = ({ data }) => {
           <Avatar sx={{ bgcolor: 'orange', width: 100, height: 100 }}>N</Avatar>
           <Stack direction={'column'} sx={{ mt: 3 }}>
             <Typography sx={{ fontSize: "20px", color: "#434966", mb: 1 }}>{`${data?.personalData.name} ${data?.personalData.lastName}`}</Typography>
-            <Typography sx={{ fontSize: "18px", color: "#82889C" }}>{data?.professionalData.proffesion}</Typography>
+            <Typography sx={{ fontSize: "18px", color: "#82889C" }}>{doctorSpecialityLabel(data?.professionalData.proffesion)}</Typography>
             <Typography sx={{ fontSize: "14px", color: "#82889C" }}>Bydgoszcz</Typography>
           </Stack>
         </Stack>

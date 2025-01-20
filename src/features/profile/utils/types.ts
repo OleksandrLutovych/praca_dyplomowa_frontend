@@ -1,3 +1,5 @@
+import { DoctorSpeciality } from "../../../entities/doctor-speciality/enum";
+
 export interface DoctorProfileData {
   personalData: {
     name: string;
@@ -8,7 +10,7 @@ export interface DoctorProfileData {
     phone: string;
   };
   professionalData: {
-    proffesion: string;
+    proffesion: DoctorSpeciality;
     education: string;
     about: string;
   };

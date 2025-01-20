@@ -14,7 +14,7 @@ const columns: ColumnDef<PatientPersonalVisit, any>[] = [
   columnHelper.accessor('doctor', {
     header: 'Lekarz',
     cell: (row) => {
-      const doctor = row.getValue();
+      const doctor = row.getValue().user;
       return `${doctor.firstName} ${doctor.lastName}`;
     },
   }),

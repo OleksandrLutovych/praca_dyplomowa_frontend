@@ -31,7 +31,6 @@ const ActivatePatientAccount = () => {
   });
 
   const handleFormSubmit = (data: PatientActivateFormData) => {
-    console.log(data)
     mutate(data)
   }
   return (

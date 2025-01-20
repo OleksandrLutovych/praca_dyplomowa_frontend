@@ -73,7 +73,6 @@ const ScheduleCalendar = () => {
     onOpen();
   };
 
-  console.log(selectedValue)
 
   const handleFormSubmit = (values: DefaultAvailabilityFormData) => {
 
