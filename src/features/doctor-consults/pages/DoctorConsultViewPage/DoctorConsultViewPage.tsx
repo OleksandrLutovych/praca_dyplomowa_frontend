@@ -3,6 +3,7 @@ import { useConsult } from '../../utils/hooks';
 import { ApiError, Breadcrumbs, Loader } from '../../../../shared/ui';
 import { ConsultInfoCard } from '../../components';
 import { Button, Card } from '@mui/material';
+import { VisitStatus } from '../../../../entities/visits/enums';
 
 const DoctorConsultViewPage = () => {
 
@@ -20,7 +21,7 @@ const DoctorConsultViewPage = () => {
       <Card sx={{ p: '25px', mx: 'auto' }}>
         {data && <ConsultInfoCard data={data} />}
 
-        <Button variant='contained'>Zakończ wizytę</Button>
+        {data?.status !== VisitStatus.CANCELED && <Button variant='contained'>Zakończ wizytę</Button>}
       </Card>
     </>
   );

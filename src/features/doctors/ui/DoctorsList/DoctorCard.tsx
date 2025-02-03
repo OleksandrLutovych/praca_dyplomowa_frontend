@@ -1,17 +1,21 @@
 import { Avatar, Box, Button, Card, CardContent, Divider, List, ListItem, Rating, Stack, Typography } from "@mui/material";
+import { format } from "date-fns";
+import { pl } from "date-fns/locale";
 import { FC } from "react";
-import { doctorSpecialityLabel } from "../../../../entities/doctor-speciality/options";
 import { DoctorSpeciality } from "../../../../entities/doctor-speciality/enum";
+import { doctorSpecialityLabel } from "../../../../entities/doctor-speciality/options";
 
 type Props = {
   name: string;
   proffesion: DoctorSpeciality;
   services: { id: number, service: string, price: number }[];
   rating: number;
+  isAvailable: boolean;
+  closestAvailableDate: Date
   onClick: () => void;
 }
 
-const DoctorCard: FC<Props> = ({ name, proffesion, services, rating, onClick }) => {
+const DoctorCard: FC<Props> = ({ name, proffesion, services, rating, onClick, isAvailable, closestAvailableDate }) => {
   return (
     <Card sx={{ minWidth: 360, borderRadius: 5 }}>
       <CardContent sx={{ p: 4 }}>
@@ -53,7 +57,12 @@ const DoctorCard: FC<Props> = ({ name, proffesion, services, rating, onClick }) 
           </Box>
         </Stack>
 
-        <Button variant="contained" sx={{ width: '100%', mt: 2 }} onClick={onClick}>Umów się na wizytę</Button>
+        <Button variant="contained" sx={{ width: '100%', mt: 2 }} onClick={onClick} disabled={!isAvailable}>
+          {isAvailable ? 'Umów się na wizytę' : 'Brak terminów'}
+        </Button>
+        {closestAvailableDate && <Typography sx={{ mt: 2, opacity: 0.5 }}>Najbliższy termin: {format(closestAvailableDate, "dd.MMMM HH:mm", {
+          locale: pl
+        })}</Typography>}
       </CardContent>
     </Card >
   );

@@ -19,7 +19,8 @@ const PatientPersonalVisitsListPage = () => {
       {
         data && <DataTable<PatientPersonalVisit>
           columns={columns}
-          data={data} />
+          data={data} 
+          />
       }
     </>
   );

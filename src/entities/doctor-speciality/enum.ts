@@ -7,7 +7,7 @@ export enum DoctorSpeciality {
   NEUROLOGIST = "Neurolog",
   OPHTHALMOLOGIST = "Okulista",
   ORTHOPEDIST = "Ortopeda",
-  OTOLARYNGOLOGIST = "Laryngolog",
+  OTOLARYNGOLOGIS = "Laryngolog",
   PEDIATRICIAN = "Pediatra",
   PSYCHIATRIST = "Psychiatra",
   PSYCHOLOGIST = "Psycholog",

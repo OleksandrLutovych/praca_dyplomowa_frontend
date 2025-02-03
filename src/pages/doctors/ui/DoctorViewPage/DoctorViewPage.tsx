@@ -9,6 +9,7 @@ import { Visit } from "../../utils/types";
 import { CreateAppointmentForm, CreateAppointmentFormData } from "../../../../features/doctors/forms";
 import { ApiError, Breadcrumbs, Loader } from "../../../../shared/ui";
 import { BackendError } from "../../../../shared/types/api-types";
+import { PatientPersonalVisitsQueryName } from "../../../../features/patient-personal-visits/utils/enums";
 
 const DoctorViewPage = () => {
   const { id } = useParams();
@@ -27,6 +28,12 @@ const DoctorViewPage = () => {
     mutationFn: (data) => VisitApi.create({ id: Number(id), value: data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['available-times'] })
+      queryClient.invalidateQueries({
+        queryKey: [PatientPersonalVisitsQueryName.SIGNLE, id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [PatientPersonalVisitsQueryName.LIST],
+      });
     }
   });
 

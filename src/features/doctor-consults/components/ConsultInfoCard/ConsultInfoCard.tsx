@@ -9,6 +9,7 @@ import { MdMergeType } from "react-icons/md";
 import { visitSubTypes, visitTypes } from "../../../doctors/utils/options";
 import { Consult } from "../../utils/types";
 import { GoNumber } from "react-icons/go";
+import StatusIcon from "../../../../shared/ui/StatusIcon";
 
 type Props = {
   data: Consult
@@ -33,11 +34,19 @@ const ConsultInfoCard: FC<Props> = ({ data }) => {
       <Stack direction={"row"} alignItems={'center'} gap={2}>
         <FaStethoscope size={25} />
         <Typography variant='h6'>{data.service.service}</Typography>
+
+        <Stack direction={"row"} alignItems={'center'} gap={2} ml={10}>
+          <StatusIcon status={data.status} size={30} />
+          <Typography variant='body1'>Status</Typography>
+        </Stack>
       </Stack>
+
+
 
       <Divider sx={{ my: 5 }} />
 
       <Stack gap={3} color='#7E7E7E'>
+
 
         <Stack direction={"row"} alignItems={'center'} gap={2}>
           <FaUser size={25} />

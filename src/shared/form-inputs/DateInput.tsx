@@ -11,9 +11,10 @@ type Props = {
   defaultValue: Date | number,
   control: Control<any>
   format?: string
+  miliseconds?: boolean
 }
 
-const DateInput: FC<Props> = ({ control, defaultValue, label, name, title, format }) => {
+const DateInput: FC<Props> = ({ control, defaultValue, label, name, title, format, miliseconds }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Controller name={name} control={control}
@@ -21,7 +22,16 @@ const DateInput: FC<Props> = ({ control, defaultValue, label, name, title, forma
           ({ field: { onChange, value, }, fieldState: { error } }) => (
             <FormControl sx={{ width: "100%" }}>
               <FormLabel htmlFor="email" sx={{ textAlign: 'start' }}>{title}</FormLabel>
-              <DatePicker value={value} onChange={onChange} defaultValue={defaultValue} label={label} format={format} />
+              <DatePicker value={value}
+                onChange={(e) => {
+                  if (miliseconds) {
+                    const timestamp = e ? e.getTime() : null;
+                    onChange(timestamp);
+                  } else {
+                    onChange(e);
+                  }
+                }}
+                defaultValue={defaultValue} label={label} format={format} />
             </FormControl>
           )}
       />

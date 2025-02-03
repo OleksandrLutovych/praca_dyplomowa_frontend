@@ -71,7 +71,6 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
   }, [available, date])
 
 
-
   const handleFormSubmit = (values: CreateAppointmentFormData) => {
     if (!selectedHour) {
       throw new Error('Select hour!')
@@ -82,7 +81,18 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
     return mutate(values);
   };
 
-  const hasAvailableHours = (date: Date) => (availableDays?.filter((availableDate) => isSameDay(date, availableDate)).length ?? 0) > 0
+  const hasAvailableHours = (date: Date) => {
+    if (!available) {
+      return false
+    }
+
+    const x = available.find((day) => isSameDay(new Date(day.date), date))
+
+    const hoursExist = x ? x.availableTimes.length > 0 : false
+
+    return (availableDays?.filter((availableDate) => isSameDay(date, availableDate)).length ?? 0) > 0
+      && hoursExist
+  }
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}
@@ -107,7 +117,6 @@ const CreateAppointmentForm: FC<Props> = ({ mutate }) => {
               />
               {error?.message}
             </>
-
           )
         }
       }

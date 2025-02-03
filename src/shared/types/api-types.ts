@@ -4,6 +4,6 @@ export type UniversalListResponse<T> = {
 };
 
 export type BackendError = {
-  error: string;
+  message: string;
   status: number;
 };

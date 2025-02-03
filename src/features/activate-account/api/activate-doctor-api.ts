@@ -1,10 +1,33 @@
 import { API } from "../../../shared/api";
+import { DoctorActivateFormData } from "../../register/forms";
 
-const activateDoctorApi = ({ id }: { id?: number }) => {
+const baseUrl = "auth/activate-doctor";
+
+const activate = ({
+  id,
+  data,
+}: {
+  id?: number;
+  data: DoctorActivateFormData;
+}) => {
   return API.request({
-    method: "GET",
-    url: `auth/activate-doctor/${id}`,
+    method: "POST",
+    url: `${baseUrl}/${id}`,
+    data,
   });
 };
 
-export default activateDoctorApi;
+const getDoctorUser = ({ id, signal }: { id: number; signal: AbortSignal }) => {
+  return API.request({
+    url: `${baseUrl}/${id}`,
+    method: "GET",
+    signal,
+  });
+};
+
+const ActivateDoctorApi = {
+  activate,
+  getDoctorUser
+};
+
+export default ActivateDoctorApi;

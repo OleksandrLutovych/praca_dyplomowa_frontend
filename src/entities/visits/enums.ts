@@ -11,6 +11,13 @@ enum VisitSubType {
   CONTROL = "CONTROL",
 }
 
+enum VisitStatus {
+  CREATED = "CREATED",
+  CANCELED = "CANCELED",
+  ACCEPTED = "ACCEPTED",
+  FINISHED = "FINISHED",
+}
+
 interface Visit {
   id: number;
   date: Date;
@@ -25,5 +32,5 @@ interface Visit {
   place: string;
 }
 
-export { VisitType, VisitSubType };
+export { VisitType, VisitSubType, VisitStatus };
 export type { Visit };

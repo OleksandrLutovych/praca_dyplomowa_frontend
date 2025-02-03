@@ -1,4 +1,8 @@
-import { VisitSubType, VisitType } from "../../../entities/visits/enums";
+import {
+  VisitStatus,
+  VisitSubType,
+  VisitType,
+} from "../../../entities/visits/enums";
 
 type PatientPersonalVisit = {
   id: number;
@@ -14,6 +18,11 @@ type PatientPersonalVisit = {
   type: VisitType;
   subType: VisitSubType;
   createdAt: Date;
+  service: {
+    price: number;
+    recomendation: string;
+  };
+  status: VisitStatus;
 };
 
 export type { PatientPersonalVisit };

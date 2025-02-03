@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { Input } from "../../../../shared/form-inputs";
 import { AuthLayout } from "../../../../shared/layouts";
+import { BackendError } from '../../../../shared/types/api-types.ts';
+import { ApiError } from '../../../../shared/ui/index.ts';
 
 const RegisterForm = () => {
 
@@ -26,7 +28,7 @@ const RegisterForm = () => {
         isError,
         isSuccess,
         isPending,
-    } = useMutation<unknown, AxiosError, InitialRegisterFormData>({
+    } = useMutation<unknown, AxiosError<BackendError>, InitialRegisterFormData>({
         mutationKey: ['register'],
         mutationFn: (data) => registerApi(data),
         onSuccess: () => {
@@ -41,19 +43,19 @@ const RegisterForm = () => {
         mutate(data);
     };
 
-
+    console.log(error?.code)
     return (
         <AuthLayout isLoading={isPending || nextPageLoading}>
+            <ApiError error={error} isError={isError} />
             <>
-                <Collapse in={isSuccess || isError}>
+                {isSuccess && <Collapse in={isSuccess}>
                     <Alert
-                        severity={isSuccess ? 'success' : 'error'}
+                        severity={'success'}
                         sx={{ mb: 2 }}
                     >
-                        {error && error?.message}
                         {isSuccess && 'Konto zostało utworzone. Sprawdź swoją skrzynkę mailową, aby aktywować konto.'}
                     </Alert>
-                </Collapse>
+                </Collapse>}
                 <Typography
                     component="h1"
                     variant="h4"

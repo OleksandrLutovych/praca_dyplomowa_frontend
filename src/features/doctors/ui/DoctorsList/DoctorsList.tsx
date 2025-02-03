@@ -35,21 +35,20 @@ const DoctorsList = () => {
 
       {
         (isSuccess && data.length) ?
-          <>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 2, lg: 3 }} alignItems="center" >
-              {data.map(({ user, rating, proffesion, id, services }) => (
-                <Grid key={id}>
-                  <DoctorCard name={`${user.firstName} ${user.lastName}`}
-                    proffesion={proffesion}
-                    services={services}
-                    rating={rating}
-                    onClick={() => handleClick(id)} />
-                </Grid>
-              ))}
-
-            </Grid>
-            {/* <Pagination count={data.meta.total} page={data.meta.currentPage} color="primary" sx={{ mt: 5 }} /> */}
-          </>
+          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 2, lg: 3 }} alignItems="center" >
+            {data.map(({ user, rating, proffesion, id, services, isAvailable, closestAvailableDate }) => (
+              <Grid key={id}>
+                <DoctorCard name={`${user.firstName} ${user.lastName}`}
+                  proffesion={proffesion}
+                  services={services}
+                  rating={rating}
+                  onClick={() => handleClick(id)}
+                  isAvailable={isAvailable}
+                  closestAvailableDate={closestAvailableDate}
+                />
+              </Grid>
+            ))}
+          </Grid>
           : <>Brak danych</>
       }
     </>

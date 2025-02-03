@@ -1,4 +1,4 @@
-import { Box, Button, Card, Divider, Stack, Typography } from '@mui/material';
+import { Box, Card, Divider, Stack, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { addHours } from 'date-fns';
@@ -16,6 +16,13 @@ import { UpcomingVisits } from '../../components';
 
 moment.tz.setDefault('Europe/Paris')
 moment.locale("pl");
+
+const breadcrumbItems = [
+  { label: "Dashboard", to: "/dashboard", isCurrentPage: false },
+  { label: "Moje wizyty", to: "/dashboard/calendar", isCurrentPage: true },
+]
+
+
 const localizer = momentLocalizer(moment)
 
 const CalendarPage = () => {
@@ -45,7 +52,7 @@ const CalendarPage = () => {
 
   return (
     <>
-      <Breadcrumbs items={[]} />
+      <Breadcrumbs items={breadcrumbItems} />
       <ApiError error={error} isError={isError} />
       <Loader isLoading={isLoading} />
 

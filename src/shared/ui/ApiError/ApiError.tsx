@@ -15,7 +15,7 @@ const ApiError: FC<Props> = ({ error, isError }) => {
 
   return (
     <Alert severity="error" sx={{ my: 1 }}>
-      {error?.response?.status} {error?.response?.data.error}
+      {error?.response?.data.message}
     </Alert>
   );
 };

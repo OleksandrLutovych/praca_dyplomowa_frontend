@@ -1,12 +1,16 @@
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import { PatientPersonalVisit } from "../../utils/types";
 import { format } from "date-fns";
+import StatusIcon from "../../../../shared/ui/StatusIcon";
 import { visitSubTypes, visitTypes } from "../../../doctors/utils/options";
-import { Button, IconButton } from "@mui/material";
-import { IoEyeSharp } from "react-icons/io5";
+import { PatientPersonalVisit } from "../../utils/types";
+import TableActions from "./TableActions";
 
 const columnHelper = createColumnHelper<PatientPersonalVisit>();
 const columns: ColumnDef<PatientPersonalVisit, any>[] = [
+  columnHelper.accessor('status', {
+    header: 'Status',
+    cell: (row) => <StatusIcon status={row.getValue()} size={30} />,
+  }),
   columnHelper.accessor('date', {
     header: 'Data wizyty',
     cell: (row) => format(row.getValue(), 'dd.MM.yyyy HH:mm'),
@@ -40,8 +44,8 @@ const columns: ColumnDef<PatientPersonalVisit, any>[] = [
   columnHelper.display({
     id: 'actions',
     header: 'Akcje',
-    cell: (cell) => <IconButton color="primary" onClick={() => console.log(cell.row)}><IoEyeSharp /></IconButton>,
+    cell: (cell) => <TableActions cell={cell} />,
   })
 ]
 
-export { columns }
+export { columns };

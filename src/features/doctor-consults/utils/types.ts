@@ -1,6 +1,10 @@
 import { DoctorService } from "../../../entities/doctor-service/types";
 import { Patient } from "../../../entities/patient/types";
-import { VisitSubType, VisitType } from "../../../entities/visits/enums";
+import {
+  VisitStatus,
+  VisitSubType,
+  VisitType,
+} from "../../../entities/visits/enums";
 
 export type Consult = {
   id: number;
@@ -9,5 +13,6 @@ export type Consult = {
   subType: VisitSubType;
   patient: Patient;
   service: DoctorService;
-  place: string;  
+  place: string;
+  status: VisitStatus;
 };

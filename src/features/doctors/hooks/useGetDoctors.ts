@@ -3,7 +3,6 @@ import { AxiosError } from "axios";
 import { Doctor } from "../../../entities/doctor/types";
 import { DoctorsApi } from "../api";
 import { DoctorQueryKeys } from "../utils/enums";
-import { UniversalListResponse } from "../../../shared/types/api-types";
 import { useSearchParams } from "react-router-dom";
 
 const useDoctors = () => {

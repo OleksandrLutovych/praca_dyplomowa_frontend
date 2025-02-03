@@ -9,113 +9,102 @@ import { AxiosError } from "axios";
 import { doctorRegisterApi } from "../../api/register-api.ts";
 import { defaultValues, DoctorRegisterFormData, schema } from "./config.ts";
 import { AuthLayout } from "../../../../shared/layouts";
-import { doctorSpecialityOptions } from "../../../../entities/doctor-speciality/options.ts";
 
 const DoctorRegisterForm = () => {
 
-    const [nextPageLoading, setNextPageLoading] = useState(false);
+  const [nextPageLoading, setNextPageLoading] = useState(false);
 
-    const navigate = useNavigate();
-    const { handleSubmit, register, formState: { errors }, control } = useForm<DoctorRegisterFormData>({
-        resolver: zodResolver(schema),
-        defaultValues,
-    });
+  const navigate = useNavigate();
+  const { handleSubmit, register, formState: { errors }, control } = useForm<DoctorRegisterFormData>({
+    resolver: zodResolver(schema),
+    defaultValues,
+  });
 
-    const {
-        mutate,
-        error,
-        isError,
-        isSuccess,
-        isPending,
-    } = useMutation<unknown, AxiosError, DoctorRegisterFormData>({
-        mutationKey: ['doctor-register'],
-        mutationFn: (data) => doctorRegisterApi(data),
-        onSuccess: () => {
-            setTimeout(() => {
-                setNextPageLoading(false);
-                navigate('/login');
-            }, 4000);
-        },
-    });
+  const {
+    mutate,
+    error,
+    isError,
+    isSuccess,
+    isPending,
+  } = useMutation<unknown, AxiosError, DoctorRegisterFormData>({
+    mutationKey: ['doctor-register'],
+    mutationFn: (data) => doctorRegisterApi(data),
+    onSuccess: () => {
+      setTimeout(() => {
+        setNextPageLoading(false);
+        navigate('/login');
+      }, 4000);
+    },
+  });
 
-    const handleFormSubmit = (data: DoctorRegisterFormData) => {
-        console.log(data)
-        mutate(data);
-    };
+  const handleFormSubmit = (data: DoctorRegisterFormData) => {
+    console.log(data)
+    mutate(data);
+  };
 
-    return (
-        <AuthLayout isLoading={isPending || nextPageLoading}>
-            <>
-                <Collapse in={isSuccess || isError}>
-                    <Alert
-                        severity={isSuccess ? 'success' : 'error'}
-                        sx={{ mb: 2 }}
-                    >
-                        {error && error?.message}
-                        {isSuccess && 'Konto zostało utworzone. Sprawdź swoją skrzynkę mailową, aby aktywować konto.'}
-                    </Alert>
-                </Collapse>
-                <Typography
-                    component="h1"
-                    variant="h4"
-                    sx={{ fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-                >
-                    Rejestracja lekarza
-                </Typography>
-                <form onSubmit={handleSubmit(handleFormSubmit)}
-                    style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 10 }}>
+  return (
+    <AuthLayout isLoading={isPending || nextPageLoading}>
+      <>
+        <Collapse in={isSuccess || isError}>
+          <Alert
+            severity={isSuccess ? 'success' : 'error'}
+            sx={{ mb: 2 }}
+          >
+            {error && error?.message}
+            {isSuccess && 'Konto zostało utworzone. Sprawdź swoją skrzynkę mailową, aby aktywować konto.'}
+          </Alert>
+        </Collapse>
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{ fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+        >
+          Rejestracja lekarza
+        </Typography>
+        <form onSubmit={handleSubmit(handleFormSubmit)}
+          style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 10 }}>
 
-                    <Input name={"firstName"} label={"Jan"} type={"text"} defaultValue={defaultValues.firstName}
-                        control={control} title={"Imię"} />
-                    <Input name={"lastName"} label={"Kowalski"} type={"text"} defaultValue={defaultValues.lastName}
-                        control={control} title={"Nazwisko"} />
-                    <Input name={"email"} label={"email@gmail.com"} type={"email"} defaultValue={defaultValues.email}
-                        control={control} title={"Email"} />
+          <Input name={"firstName"} label={"Jan"} type={"text"} defaultValue={defaultValues.firstName}
+            control={control} title={"Imię"} />
+          <Input name={"lastName"} label={"Kowalski"} type={"text"} defaultValue={defaultValues.lastName}
+            control={control} title={"Nazwisko"} />
+          <Input name={"email"} label={"email@gmail.com"} type={"email"} defaultValue={defaultValues.email}
+            control={control} title={"Email"} />
 
-                    <FormControl>
-                        <FormLabel htmlFor="password">Hasło</FormLabel>
-                        <TextField
-                            label="*****"
-                            type="password"
-                            fullWidth
-                            margin="normal"
-                            defaultValue={defaultValues.password}
-                            {...register('password')}
-                            error={!!errors.password}
-                        />
-                    </FormControl>
-                    <Input name={"education"} label={"Wyższa Szkoła Gospodarki"} type={"text"}
-                        defaultValue={defaultValues.education}
-                        control={control} title={"Wykształcenie"} />
-                    <SelectInput
-                        name={"proffesion"}
-                        label={"Okulista"}
-                        defaultValue={defaultValues.proffesion}
-                        control={control}
-                        title={"Specjalizacja"}
-                        options={doctorSpecialityOptions} />
+          <FormControl>
+            <FormLabel htmlFor="password">Hasło</FormLabel>
+            <TextField
+              label="*****"
+              type="password"
+              fullWidth
+              margin="normal"
+              defaultValue={defaultValues.password}
+              {...register('password')}
+              error={!!errors.password}
+            />
+          </FormControl>
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                    >
-                        Załóż konto
-                    </Button>
-                </form>
+          <Button
+            type="submit"
+            variant="contained"
+          >
+            Załóż konto
+          </Button>
+        </form>
 
-                <Typography sx={{ textAlign: 'center' }}>
-                    Posiadasz już konto?{' '}
-                    <Link
-                        href="/login"
-                        variant="body2"
-                        sx={{ alignSelf: 'center' }}
-                    >
-                        Zaloguj się!
-                    </Link>
-                </Typography>
-            </>
-        </AuthLayout>
-    );
+        <Typography sx={{ textAlign: 'center' }}>
+          Posiadasz już konto?{' '}
+          <Link
+            href="/login"
+            variant="body2"
+            sx={{ alignSelf: 'center' }}
+          >
+            Zaloguj się!
+          </Link>
+        </Typography>
+      </>
+    </AuthLayout>
+  );
 };
 
 export default DoctorRegisterForm;

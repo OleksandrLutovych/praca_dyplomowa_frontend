@@ -10,6 +10,8 @@ type Doctor = {
   services: { id: number; service: string; price: number }[];
   rating: number;
   image: string;
+  isAvailable: boolean;
+  closestAvailableDate: Date;
 };
 
 type DoctorProfileData = {

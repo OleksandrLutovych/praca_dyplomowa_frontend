@@ -21,7 +21,7 @@ import { DoctorConsultViewPage } from '../features/doctor-consults/pages/index.t
 import DoctorAvailabilityPage from '../features/doctor-availability/pages/DoctorAvailabilityPage.tsx';
 import DoctorAvailabilityCreatePage from '../features/doctor-availability/pages/DoctorAvailabilityCreatePage.tsx';
 import DoctorAvailabilityCreateCustomPage from '../features/doctor-availability/pages/DoctorAvailabilityCreateCustomPage.tsx';
-import { PatientPersonalVisitsListPage } from '../features/patient-personal-visits/pages/index.ts';
+import { PatientPersonalVisitsListPage, PatientPersonalVisitsViewPage } from '../features/patient-personal-visits/pages/index.ts';
 
 function App() {
 
@@ -63,6 +63,7 @@ function App() {
                             <Route path={'availability/add'} element={<DoctorAvailabilityCreatePage />} />
                             <Route path={'availability/add-custom'} element={<DoctorAvailabilityCreateCustomPage />} />
                             <Route path={'my-visits'} element={<PatientPersonalVisitsListPage />} />
+                            <Route path={'my-visits/:id'} element={<PatientPersonalVisitsViewPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>

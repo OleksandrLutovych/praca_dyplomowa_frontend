@@ -1,12 +1,13 @@
-import { Alert, Button, Typography } from '@mui/material';
-import { PatientActivateForm } from '../../../features/register/forms';
-import { PatientActivateFormData } from '../../../features/register/forms/PatientActivateForm/config';
-import { DoctorRegisterFormData } from '../../../features/register/forms/DoctorRegisterForm/config';
+import { Alert, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { activatePatientApi } from '../../../features/activate-account/api';
 import { useNavigate, useParams } from 'react-router-dom';
+import { activatePatientApi } from '../../../features/activate-account/api';
+import { PatientActivateForm } from '../../../features/register/forms';
+import { PatientActivateFormData } from '../../../features/register/forms/PatientActivateForm/config';
 import { AuthLayout } from '../../../shared/layouts';
+import { ApiError } from '../../../shared/ui';
+import { BackendError } from '../../../shared/types/api-types';
 
 const ActivatePatientAccount = () => {
 
@@ -20,7 +21,7 @@ const ActivatePatientAccount = () => {
     isError,
     isSuccess,
     isPending,
-  } = useMutation<unknown, AxiosError, PatientActivateFormData>({
+  } = useMutation<unknown, AxiosError<BackendError>, PatientActivateFormData>({
     mutationKey: ['patient-activate'],
     mutationFn: (data) => activatePatientApi({ id: userId, data }),
     onSuccess: () => {
@@ -35,6 +36,7 @@ const ActivatePatientAccount = () => {
   }
   return (
     <AuthLayout isLoading={isPending}>
+      <ApiError error={error} isError={isError} />
       {!isSuccess &&
         <>
           <Typography variant='h5' sx={{ textAlign: "center" }}>Wypeij formularz dla zakończenia rejestracji</Typography>
