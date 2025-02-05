@@ -74,6 +74,11 @@ const ConsultInfoCard: FC<Props> = ({ data }) => {
         </Stack>
       </Stack>
       <Divider sx={{ my: 5 }} />
+
+      <Stack direction={"column"} alignItems={'center'} gap={2} my={5}>
+        <Typography variant='body1' sx={{ opacity: 0.7 }}>Rekomendacje końcowe:</Typography>
+        <Typography variant='body1'>{data.finishRecomendations}</Typography>
+      </Stack>
     </>
   );
 };

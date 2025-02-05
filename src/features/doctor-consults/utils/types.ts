@@ -15,4 +15,9 @@ export type Consult = {
   service: DoctorService;
   place: string;
   status: VisitStatus;
+  finishRecomendations?: string;
+  comment?: string;
+  ranking?: number;
+  rejectReason?: string;
+  finishedAt?: Date;
 };

@@ -23,6 +23,9 @@ type PatientPersonalVisit = {
     recomendation: string;
   };
   status: VisitStatus;
+  finishRecomendations?: string;
+  comment?: string;
+  ranking?: string;
 };
 
 export type { PatientPersonalVisit };

@@ -12,7 +12,8 @@ import { ApiError, Breadcrumbs, Loader } from '../../../../shared/ui';
 import { DoctorCalendarApi } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { CalendarEvent } from '../../utils/types';
-import { UpcomingVisits } from '../../components';
+import { CalendarLegend, UpcomingVisits } from '../../components';
+import { VisitStatus } from '../../../../entities/visits/enums';
 
 moment.tz.setDefault('Europe/Paris')
 moment.locale("pl");
@@ -39,7 +40,8 @@ const CalendarPage = () => {
         id: event.id,
         title: event.title,
         start: event.start,
-        end: addHours(event.end, 1)
+        end: addHours(event.end, 1),
+        status: event.status,
       })) || []
 
       return response
@@ -61,6 +63,7 @@ const CalendarPage = () => {
         <Card sx={{
           height: 700, width: '75%', padding: 2
         }}>
+          <CalendarLegend />
           <Calendar<CalendarEvent>
             localizer={localizer}
             culture='pl'
@@ -69,6 +72,35 @@ const CalendarPage = () => {
             endAccessor={(event) => { return new Date(event.end ?? '') }}
             onDoubleClickEvent={(event) => handleEventClick(event.id)}
             onRangeChange={(range) => console.log(range)}
+            eventPropGetter={(event) => {
+              let backgroundColor = ''
+              let textColor = ''
+              switch (event.status) {
+                case VisitStatus.ACCEPTED:
+                  backgroundColor = 'green'
+                  textColor = 'white'
+                  break
+                case VisitStatus.CANCELED:
+                  backgroundColor = 'red'
+                  textColor = 'white'
+                  break
+                case VisitStatus.FINISHED:
+                  backgroundColor = 'blue'
+                  textColor = 'white'
+                  break
+                default:
+                  backgroundColor = 'gray'
+                  textColor = 'white'
+                  break
+              }
+              return {
+                style: {
+                  backgroundColor,
+                  color: textColor
+                }
+              }
+            }}
+
           />
         </Card>
 

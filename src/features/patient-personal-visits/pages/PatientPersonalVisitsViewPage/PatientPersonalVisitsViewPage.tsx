@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Collapse, Stack, Typography } from '@mui/material';
+import { Alert, Button, Card, Collapse, Divider, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { FaUserDoctor } from 'react-icons/fa6';
@@ -11,6 +11,7 @@ import StatusIcon from '../../../../shared/ui/StatusIcon';
 import { usePatientApproveVisit } from '../../hooks/usePatientApproveVisit';
 import { usePatientCancelVisit } from '../../hooks/usePatientCancelVisit';
 import { VisitStatus } from '../../../../entities/visits/enums';
+import { LeaveFeedbackForm } from '../../forms';
 
 const breadcrumbsItems = [
   { label: 'Dashboard', to: '/dashboard' },
@@ -87,6 +88,13 @@ const PatientPersonalVisitsViewPage = () => {
             </Button>
           )}
         </Stack>
+        <Divider sx={{ my: 5 }} />
+        {data?.finishRecomendations && <Stack direction={"column"} alignItems={'center'} gap={2} my={5}>
+          <Typography variant='body1' sx={{ opacity: 0.7 }}>Rekomendacje końcowe:</Typography>
+          <Typography variant='body1'>{data.finishRecomendations}</Typography>
+        </Stack>}
+
+        {data?.status === VisitStatus.FINISHED && !data?.comment && <LeaveFeedbackForm />}
 
       </Card >
     </>

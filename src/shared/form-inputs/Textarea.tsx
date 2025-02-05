@@ -20,6 +20,8 @@ const Textarea: FC<Props> = ({ name, defaultValue, control, title }) => {
               onChange={onChange}
               defaultValue={defaultValue}
               minRows={4}
+              style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', width: '100%', resize: 'vertical', }}
+
             />
           </FormControl>
         )}

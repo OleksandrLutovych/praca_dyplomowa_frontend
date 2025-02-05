@@ -36,12 +36,12 @@ const DoctorsList = () => {
       {
         (isSuccess && data.length) ?
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 2, md: 2, lg: 3 }} alignItems="center" >
-            {data.map(({ user, rating, proffesion, id, services, isAvailable, closestAvailableDate }) => (
+            {data.map(({ user, ranking, proffesion, id, services, isAvailable, closestAvailableDate, comments }) => (
               <Grid key={id}>
                 <DoctorCard name={`${user.firstName} ${user.lastName}`}
                   proffesion={proffesion}
                   services={services}
-                  rating={rating}
+                  rating={ranking}
                   onClick={() => handleClick(id)}
                   isAvailable={isAvailable}
                   closestAvailableDate={closestAvailableDate}

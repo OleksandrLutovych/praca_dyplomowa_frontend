@@ -1,4 +1,5 @@
 import { API } from "../../../shared/api";
+import { LeaveFeedbackFormData } from "../forms/LeaveFeedbackForm";
 
 type QueryProps = {
   signal: AbortSignal;
@@ -34,11 +35,26 @@ const cancel = async ({ id }: { id: number }) => {
   });
 };
 
+const feedback = async ({
+  id,
+  data,
+}: {
+  id: number;
+  data: LeaveFeedbackFormData;
+}) => {
+  return API.request({
+    method: "POST",
+    url: `/patient-personal-visits/${id}/feedback`,
+    data,
+  });
+};
+
 const PatientPersonalVisitsApi = {
   getAll,
   getById,
   aprove,
   cancel,
+  feedback,
 };
 
 export { PatientPersonalVisitsApi };
